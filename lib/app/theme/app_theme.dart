@@ -3,14 +3,14 @@ import 'package:google_fonts/google_fonts.dart';
 
 class AppColors {
   static const Color black = Color(0xFF000000);
-  static const Color greyText = Color(0xFFB8B8C6);
+  static const Color greyText = Color.fromARGB(255, 163, 162, 162);
   static const Color primary = Color.fromARGB(255, 3, 70, 82);
   //(0xFF003B35);
   static const Color white = Color(0xFFFFFFFF);
-  static const Color secondaryWhite = Color(0xFFD8C87A);
-  static const Color secondary = Color.fromARGB(255, 122, 236, 15);
+  static const Color secondaryWhite = Color.fromARGB(255, 230, 220, 174);
+  static const Color secondary = Color(0xFFD8C87A);
   static const Color grey2 = Color.fromARGB(255, 221, 214, 214);
-  static const Color darkGreen = Color.fromARGB(255, 11, 83, 4);
+  static const Color darkGreen = Color.fromARGB(255, 8, 128, 150);
   static const Color secondaryBlack = Color(0xF0484747);
 }
 
@@ -42,7 +42,7 @@ class AppTheme {
 
       // نص أقل أهمية
       bodySmall: GoogleFonts.almarai(
-        fontSize: 14,
+        fontSize: 2,
         fontWeight: FontWeight.normal,
       ),
     ),
