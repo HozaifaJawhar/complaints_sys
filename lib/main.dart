@@ -1,20 +1,39 @@
-import 'package:complaints_sys/app/theme/app_theme.dart';
-import 'package:complaints_sys/features/auth/presentation/pages/login_screen.dart';
+import 'package:complaints_sys/core/constants/app_themes.dart';
+import 'package:complaints_sys/core/services/router_service.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:flutter_localizations/flutter_localizations.dart';
+
+final RouterService _routerService = RouterService();
 
 void main() {
-  runApp(const ComplaintsApp());
+  runApp(MyApp());
 }
 
-class ComplaintsApp extends StatelessWidget {
-  const ComplaintsApp({super.key});
+class MyApp extends StatelessWidget {
+  const MyApp({super.key});
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      debugShowCheckedModeBanner: false,
-      theme: AppTheme.lightTheme,
-      home: const LoginScreen(),
+    return ScreenUtilInit(
+      designSize: const Size(375, 812),
+      minTextAdapt: true,
+      splitScreenMode: true,
+      builder: (context, child) {
+        return MaterialApp.router(
+          debugShowCheckedModeBanner: false,
+          title: 'Government Complaints',
+          locale: const Locale('ar'),
+          localizationsDelegates: const [
+            GlobalMaterialLocalizations.delegate,
+            GlobalWidgetsLocalizations.delegate,
+            GlobalCupertinoLocalizations.delegate,
+          ],
+          supportedLocales: const [Locale('ar')],
+          theme: AppThemes.themeArabic,
+          routerConfig: _routerService.router,
+        );
+      },
     );
   }
 }
