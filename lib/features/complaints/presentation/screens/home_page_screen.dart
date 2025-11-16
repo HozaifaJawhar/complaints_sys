@@ -1,8 +1,10 @@
 import 'package:complaints_sys/core/constants/app_colors.dart';
+import 'package:complaints_sys/core/constants/app_routes.dart';
 import 'package:complaints_sys/features/auth/presentation/widgets/custom_textfield.dart';
 import 'package:complaints_sys/features/complaints/presentation/widgets/filtter_wedget.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:go_router/go_router.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({super.key});
@@ -26,7 +28,9 @@ class _HomePageState extends State<HomePage> {
                 Icons.circle_notifications_sharp,
                 color: AppColors.primary500,
               ),
-              onPressed: () {},
+              onPressed: () {
+                context.push(AppRoutes.notificationScreen);
+              },
             ),
           ),
         ],
@@ -62,7 +66,9 @@ class _HomePageState extends State<HomePage> {
         ],
       ),
       floatingActionButton: FloatingActionButton(
-        onPressed: () {},
+        onPressed: () {
+          context.push(AppRoutes.createComplaintScreen);
+        },
         tooltip: 'Increment',
         shape: const CircleBorder(),
         child: const Icon(Icons.add),

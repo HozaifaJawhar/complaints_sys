@@ -10,5 +10,13 @@ abstract class AppRoutes {
   static const String resetPasswordScreen = "/resetPasswordScreen";
   static const String otpPasswordScreen = "/otpPasswordScreen";
   //-----------------------------------------------------
+  // Complaints Routes
+  //-----------------------------------------------------
   static const String homePageScreen = "/homePageScreen";
+  static const String createComplaintScreen = "/createComplaintScreen";
+  static const String complaintDetailsScreen = "/complaintDetailsScreen";
+  //-----------------------------------------------------
+  // Notifications Routes
+  //-----------------------------------------------------
+  static const String notificationScreen = "/notificationScreen";
 }
