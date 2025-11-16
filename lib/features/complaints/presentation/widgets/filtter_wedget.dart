@@ -9,22 +9,93 @@ class FiltterWedget extends StatelessWidget {
   Widget build(BuildContext context) {
     return Padding(
       padding: const EdgeInsets.only(right: 4),
-      child: Container(
-        height: 58.h,
-        width: 50.w,
-        decoration: BoxDecoration(
-          color: AppColors.fillColor,
-          borderRadius: BorderRadius.circular(10),
-        ),
-        padding: const EdgeInsets.all(8),
-        child: Center(
-          child: Icon(
-            size: 30,
-            Icons.filter_alt_outlined,
-            color: AppColors.primary400,
+      child: GestureDetector(
+        onTap: () {
+          _showFilterDialog(context);
+        },
+        child: Container(
+          height: 58.h,
+          width: 50.w,
+          decoration: BoxDecoration(
+            color: AppColors.fillColor,
+            borderRadius: BorderRadius.circular(10),
+          ),
+          padding: const EdgeInsets.all(8),
+          child: Center(
+            child: Icon(
+              Icons.filter_alt_outlined,
+              size: 30,
+              color: AppColors.primary400,
+            ),
           ),
         ),
       ),
+    );
+  }
+
+  void _showFilterDialog(BuildContext context) {
+    String? selectedStatus;
+
+    showDialog(
+      context: context,
+      builder: (context) {
+        return StatefulBuilder(
+          builder: (context, setState) => AlertDialog(
+            title: const Text('اختر حالة الشكوى'),
+            content: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                RadioListTile<String>(
+                  title: const Text('قيد المعالجة'),
+                  value: 'pending',
+                  groupValue: selectedStatus,
+                  onChanged: (value) {
+                    setState(() {
+                      selectedStatus = value;
+                    });
+                  },
+                ),
+                RadioListTile<String>(
+                  title: const Text('منجزة'),
+                  value: 'approved',
+                  groupValue: selectedStatus,
+                  onChanged: (value) {
+                    setState(() {
+                      selectedStatus = value;
+                    });
+                  },
+                ),
+                RadioListTile<String>(
+                  title: const Text('مرفوضة'),
+                  value: 'rejected',
+                  groupValue: selectedStatus,
+                  onChanged: (value) {
+                    setState(() {
+                      selectedStatus = value;
+                    });
+                  },
+                ),
+              ],
+            ),
+            actions: [
+              TextButton(
+                onPressed: () {
+                  Navigator.pop(context); // الغاء
+                },
+                child: const Text('إلغاء'),
+              ),
+              ElevatedButton(
+                onPressed: () {
+                  // هنا يمكنك تطبيق الفلترة حسب selectedStatus
+                  print('تم اختيار: $selectedStatus');
+                  Navigator.pop(context);
+                },
+                child: const Text('تأكيد'),
+              ),
+            ],
+          ),
+        );
+      },
     );
   }
 }
