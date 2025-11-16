@@ -1,6 +1,7 @@
 import 'package:complaints_sys/core/constants/app_colors.dart';
 import 'package:complaints_sys/core/constants/app_routes.dart';
 import 'package:complaints_sys/features/auth/presentation/widgets/custom_textfield.dart';
+import 'package:complaints_sys/features/complaints/presentation/widgets/ComplaintCard.dart';
 import 'package:complaints_sys/features/complaints/presentation/widgets/filtter_wedget.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -63,9 +64,21 @@ class _HomePageState extends State<HomePage> {
             padding: const EdgeInsets.only(top: 8, right: 20),
             child: Text('الشكاوي ', style: TextTheme.of(context).labelLarge),
           ),
+          Expanded(
+            child: Padding(
+              padding: const EdgeInsets.all(12),
+              child: ListView.builder(
+                itemCount: 8,
+                itemBuilder: (context, index) {
+                  return ComplaintCard();
+                },
+              ),
+            ),
+          ),
         ],
       ),
       floatingActionButton: FloatingActionButton(
+        backgroundColor: AppColors.primary400,
         onPressed: () {
           context.push(AppRoutes.createComplaintScreen);
         },
