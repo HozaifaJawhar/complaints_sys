@@ -61,6 +61,12 @@ class _HomePageState extends State<HomePage> {
           ),
         ],
       ),
+      floatingActionButton: FloatingActionButton(
+        onPressed: () {},
+        tooltip: 'Increment',
+        shape: const CircleBorder(),
+        child: const Icon(Icons.add),
+      ),
     );
   }
 }
