@@ -1,12 +1,13 @@
 import 'package:complaints_sys/core/constants/app_colors.dart';
+import 'package:complaints_sys/core/constants/app_routes.dart';
 import 'package:complaints_sys/features/auth/presentation/widgets/custom_button.dart';
 import 'package:complaints_sys/features/auth/presentation/widgets/custom_textfield.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:go_router/go_router.dart';
 
-class ForgetPassowrdScreen extends StatelessWidget {
-  const ForgetPassowrdScreen({super.key});
+class ResetPasswordscreen extends StatelessWidget {
+  const ResetPasswordscreen({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -62,7 +63,7 @@ class ForgetPassowrdScreen extends StatelessWidget {
                 child: CustomButton(
                   text: 'حفظ',
                   onPressed: () {
-                    context.pop();
+                    context.go(AppRoutes.loginScreen);
                   },
                   backgroundColor: AppColors.primary500,
                   textColor: AppColors.fillColor,

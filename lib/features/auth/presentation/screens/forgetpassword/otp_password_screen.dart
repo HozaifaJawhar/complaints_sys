@@ -6,13 +6,16 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:go_router/go_router.dart';
 
-class OtpScreen extends StatelessWidget {
-  const OtpScreen({super.key});
+class OtpPasswordScreen extends StatelessWidget {
+  const OtpPasswordScreen({super.key});
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: Text('تفعيل حسابك'), centerTitle: true),
+      appBar: AppBar(
+        title: Text('التحقق من بريدك الالكتروني'),
+        centerTitle: true,
+      ),
       resizeToAvoidBottomInset: true,
       body: Padding(
         padding: EdgeInsets.symmetric(horizontal: 24.w, vertical: 24.h),
@@ -58,7 +61,7 @@ class OtpScreen extends StatelessWidget {
                 child: CustomButton(
                   text: 'تفعيل',
                   onPressed: () {
-                    context.push(AppRoutes.homePageScreen);
+                    context.push(AppRoutes.resetPasswordScreen);
                   },
                   backgroundColor: AppColors.primary500,
                   textColor: AppColors.fillColor,

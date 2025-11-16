@@ -1,6 +1,8 @@
 import 'package:animations/animations.dart';
 import 'package:complaints_sys/core/constants/app_routes.dart';
-import 'package:complaints_sys/features/auth/presentation/screens/forget_passowrd_screen.dart';
+import 'package:complaints_sys/features/auth/presentation/screens/forgetpassword/forget_password_screen.dart';
+import 'package:complaints_sys/features/auth/presentation/screens/forgetpassword/otp_password_screen.dart';
+import 'package:complaints_sys/features/auth/presentation/screens/forgetpassword/reset_passowrd_screen.dart';
 import 'package:complaints_sys/features/auth/presentation/screens/home_page_screen.dart';
 import 'package:complaints_sys/features/auth/presentation/screens/login_screen.dart';
 import 'package:complaints_sys/features/auth/presentation/screens/otp_screen.dart';
@@ -69,6 +71,9 @@ class RouterService {
           },
         ),
       ),
+      //-------------------------------------------
+      // OTP Screen
+      //-------------------------------------------
       GoRoute(
         path: AppRoutes.otpScreen,
         pageBuilder: (context, state) => CustomTransitionPage(
@@ -85,6 +90,9 @@ class RouterService {
           },
         ),
       ),
+      //-------------------------------------------
+      // Home Screen
+      //-------------------------------------------
       GoRoute(
         path: AppRoutes.homePageScreen,
         pageBuilder: (context, state) => CustomTransitionPage(
@@ -101,11 +109,52 @@ class RouterService {
           },
         ),
       ),
+      //-------------------------------------------
+      // ResetPassword Screen
+      //-------------------------------------------
+      GoRoute(
+        path: AppRoutes.resetPasswordScreen,
+        pageBuilder: (context, state) => CustomTransitionPage(
+          key: state.pageKey,
+          child: const ResetPasswordscreen(),
+          transitionDuration: const Duration(milliseconds: 500),
+          transitionsBuilder: (context, animation, secondaryAnimation, child) {
+            return SharedAxisTransition(
+              animation: animation,
+              secondaryAnimation: secondaryAnimation,
+              transitionType: SharedAxisTransitionType.horizontal,
+              child: child,
+            );
+          },
+        ),
+      ),
+      //-------------------------------------------
+      // ForgetPassword Screen
+      //-------------------------------------------
       GoRoute(
         path: AppRoutes.forgetPasswordScreen,
         pageBuilder: (context, state) => CustomTransitionPage(
           key: state.pageKey,
-          child: const ForgetPassowrdScreen(),
+          child: const ForgetPasswordScreen(),
+          transitionDuration: const Duration(milliseconds: 500),
+          transitionsBuilder: (context, animation, secondaryAnimation, child) {
+            return SharedAxisTransition(
+              animation: animation,
+              secondaryAnimation: secondaryAnimation,
+              transitionType: SharedAxisTransitionType.horizontal,
+              child: child,
+            );
+          },
+        ),
+      ),
+      //-------------------------------------------
+      //  OTP Password Screen
+      //-------------------------------------------
+      GoRoute(
+        path: AppRoutes.otpPasswordScreen,
+        pageBuilder: (context, state) => CustomTransitionPage(
+          key: state.pageKey,
+          child: const OtpPasswordScreen(),
           transitionDuration: const Duration(milliseconds: 500),
           transitionsBuilder: (context, animation, secondaryAnimation, child) {
             return SharedAxisTransition(

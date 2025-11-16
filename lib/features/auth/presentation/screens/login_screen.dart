@@ -72,7 +72,7 @@ class LoginScreen extends StatelessWidget {
                     ),
                     SizedBox(height: 50.h),
                     const CustomTextField(
-                      hintText: 'رقم الموبايل',
+                      hintText: 'رقم الموبايل او البريد الالكتروني',
                       prefixIcon: Icons.phone_android,
                       keyboardType: TextInputType.phone,
                     ),
