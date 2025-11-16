@@ -1,9 +1,11 @@
 import 'package:complaints_sys/core/constants/app_colors.dart';
+import 'package:complaints_sys/core/constants/app_routes.dart';
 import 'package:complaints_sys/features/auth/presentation/widgets/custom_button.dart';
 import 'package:complaints_sys/features/auth/presentation/widgets/custom_textfield.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:go_router/go_router.dart';
 
 class RegisterScreen extends StatelessWidget {
   const RegisterScreen({super.key});
@@ -100,7 +102,9 @@ class RegisterScreen extends StatelessWidget {
                     SizedBox(height: 30.h),
                     CustomButton(
                       text: 'تسجيل الدخول',
-                      onPressed: () {},
+                      onPressed: () {
+                        context.push(AppRoutes.otpScreen);
+                      },
                       backgroundColor: AppColors.buttonColor,
                       textColor: AppColors.primary500,
                     ),

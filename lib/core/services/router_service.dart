@@ -1,6 +1,9 @@
 import 'package:animations/animations.dart';
 import 'package:complaints_sys/core/constants/app_routes.dart';
+import 'package:complaints_sys/features/auth/presentation/screens/forget_passowrd_screen.dart';
+import 'package:complaints_sys/features/auth/presentation/screens/home_page_screen.dart';
 import 'package:complaints_sys/features/auth/presentation/screens/login_screen.dart';
+import 'package:complaints_sys/features/auth/presentation/screens/otp_screen.dart';
 import 'package:complaints_sys/features/auth/presentation/screens/register_screen.dart';
 import 'package:complaints_sys/features/auth/presentation/screens/splash_screen.dart';
 import 'package:go_router/go_router.dart';
@@ -55,6 +58,54 @@ class RouterService {
         pageBuilder: (context, state) => CustomTransitionPage(
           key: state.pageKey,
           child: const RegisterScreen(),
+          transitionDuration: const Duration(milliseconds: 500),
+          transitionsBuilder: (context, animation, secondaryAnimation, child) {
+            return SharedAxisTransition(
+              animation: animation,
+              secondaryAnimation: secondaryAnimation,
+              transitionType: SharedAxisTransitionType.horizontal,
+              child: child,
+            );
+          },
+        ),
+      ),
+      GoRoute(
+        path: AppRoutes.otpScreen,
+        pageBuilder: (context, state) => CustomTransitionPage(
+          key: state.pageKey,
+          child: const OtpScreen(),
+          transitionDuration: const Duration(milliseconds: 500),
+          transitionsBuilder: (context, animation, secondaryAnimation, child) {
+            return SharedAxisTransition(
+              animation: animation,
+              secondaryAnimation: secondaryAnimation,
+              transitionType: SharedAxisTransitionType.horizontal,
+              child: child,
+            );
+          },
+        ),
+      ),
+      GoRoute(
+        path: AppRoutes.homePageScreen,
+        pageBuilder: (context, state) => CustomTransitionPage(
+          key: state.pageKey,
+          child: const HomePage(),
+          transitionDuration: const Duration(milliseconds: 500),
+          transitionsBuilder: (context, animation, secondaryAnimation, child) {
+            return SharedAxisTransition(
+              animation: animation,
+              secondaryAnimation: secondaryAnimation,
+              transitionType: SharedAxisTransitionType.horizontal,
+              child: child,
+            );
+          },
+        ),
+      ),
+      GoRoute(
+        path: AppRoutes.forgetPasswordScreen,
+        pageBuilder: (context, state) => CustomTransitionPage(
+          key: state.pageKey,
+          child: const ForgetPassowrdScreen(),
           transitionDuration: const Duration(milliseconds: 500),
           transitionsBuilder: (context, animation, secondaryAnimation, child) {
             return SharedAxisTransition(

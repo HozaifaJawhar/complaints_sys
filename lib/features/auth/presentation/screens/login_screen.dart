@@ -85,21 +85,28 @@ class LoginScreen extends StatelessWidget {
                     SizedBox(height: 12.h),
                     Align(
                       alignment: Alignment.centerRight,
-                      child: Text(
-                        'نسيت كلمة المرور',
-                        style: TextStyle(
-                          color: Colors.white70,
-                          fontSize: 14.sp,
-                          decoration: TextDecoration.underline,
-                          decorationColor: Colors.white70,
-                          fontFamily: 'Zain',
+                      child: GestureDetector(
+                        onTap: () {
+                          context.push(AppRoutes.forgetPasswordScreen);
+                        },
+                        child: Text(
+                          'نسيت كلمة المرور',
+                          style: TextStyle(
+                            color: Colors.white70,
+                            fontSize: 14.sp,
+                            decoration: TextDecoration.underline,
+                            decorationColor: Colors.white70,
+                            fontFamily: 'Zain',
+                          ),
                         ),
                       ),
                     ),
                     SizedBox(height: 30.h),
                     CustomButton(
                       text: 'تسجيل الدخول',
-                      onPressed: () {},
+                      onPressed: () {
+                        context.push(AppRoutes.homePageScreen);
+                      },
                       backgroundColor: AppColors.buttonColor,
                       textColor: AppColors.primary500,
                     ),
