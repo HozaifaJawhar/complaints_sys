@@ -1,0 +1,111 @@
+import 'dart:convert';
+import 'package:complaints_sys/core/errors/exceptions.dart';
+import 'package:flutter/foundation.dart';
+import 'package:http/http.dart' as http;
+import 'package:path/path.dart';
+
+class Api {
+  Future<dynamic> get({required String url, @required String? token}) async {
+    Map<String, String> headers = {'Accept': 'application/json'};
+    if (token != null) {
+      headers.addAll({'Authorization': 'Bearer $token'});
+    }
+    http.Response response = await http.get(Uri.parse(url), headers: headers);
+
+    if (response.statusCode == 200 || response.statusCode == 201) {
+      return jsonDecode(response.body);
+    } else {
+      var errorData = jsonDecode(response.body);
+      throw ServerException(errorData['message'] ?? 'حدث خطأ ما');
+    }
+  }
+
+  Future<dynamic> post({
+    required String url,
+    @required dynamic body,
+    @required String? token,
+  }) async {
+    Map<String, String> headers = {
+      'Content-Type': 'application/json',
+      'Accept': 'application/json',
+    };
+    if (token != null) {
+      headers.addAll({'Authorization': 'Bearer $token'});
+    }
+    http.Response response = await http.post(
+      Uri.parse(url),
+      body: jsonEncode(body),
+      headers: headers,
+    );
+    if (response.statusCode == 200 || response.statusCode == 201) {
+      return jsonDecode(response.body);
+    } else {
+      final errorData = jsonDecode(response.body);
+      final message = errorData['message'] ?? 'حدث خطأ غير معروف من السيرفر';
+      throw ServerException(message);
+    }
+  }
+
+  Future<dynamic> postMultipart({
+    required String url,
+    required Map<String, String> fields,
+    required List<String> filePaths,
+    required String filesKey, // "attachments"
+    @required String? token,
+  }) async {
+    var request = http.MultipartRequest("POST", Uri.parse(url));
+
+    if (token != null) {
+      request.headers.addAll({'Authorization': 'Bearer $token'});
+    }
+    request.headers.addAll({'Accept': 'application/json'});
+
+    request.fields.addAll(fields);
+
+    for (int i = 0; i < filePaths.length; i++) {
+      var file = await http.MultipartFile.fromPath(
+        '${filesKey}[$i]', // attachments[0], attachments[1]
+        filePaths[i],
+        filename: basename(filePaths[i]),
+      );
+      request.files.add(file);
+    }
+
+    var streamedResponse = await request.send();
+    var response = await http.Response.fromStream(streamedResponse);
+    final responseData = jsonDecode(response.body);
+
+    if (response.statusCode == 200 || response.statusCode == 201) {
+      return responseData;
+    } else {
+      final message = responseData['message'] ?? 'حدث خطأ غير معروف من السيرفر';
+      throw ServerException(message);
+    }
+  }
+
+  Future<dynamic> put({
+    required String url,
+    @required dynamic body,
+    @required String? token,
+  }) async {
+    Map<String, String> headers = {};
+    headers.addAll({'Content-Type': 'application/json'});
+    if (token != null) {
+      headers.addAll({'Authorization': 'Bearer $token'});
+    }
+
+    http.Response response = await http.put(
+      Uri.parse(url),
+      body: body,
+      headers: headers,
+    );
+    if (response.statusCode == 200 || response.statusCode == 201) {
+      Map<String, dynamic> data = jsonDecode(response.body);
+      return data;
+    } else {
+      throw Exception(
+        'there is a problem with status code ${response.statusCode} with body ${jsonDecode(response.body)}',
+      );
+    }
+  }
+}

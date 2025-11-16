@@ -1,9 +1,14 @@
 abstract class AppRoutes {
-  //-------------------------------------------
-  // Authentication Routes
-  //-------------------------------------------
+  // --- Auth ---
   static const String mainScreen = "/";
   static const String registerScreen = "/registerScreen";
   static const String loginScreen = "/loginScreen";
-  //-----------------------------------------------------
+  static const String otpScreen = "/otpScreen";
+
+  // --- Shell Routes (Tabs) ---
+  static const String homeScreen = "/home";
+  static const String complaintsListScreen = "/complaints-list";
+  static const String addComplaintScreen = "/add-complaint";
+  static const String profileScreen = "/profile";
+  static const String notificationsScreen = "/notifications";
 }

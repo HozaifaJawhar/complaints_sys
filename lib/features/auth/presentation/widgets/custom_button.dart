@@ -2,14 +2,14 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 class CustomButton extends StatelessWidget {
-  final String text;
+  final Widget child;
   final VoidCallback? onPressed;
   final Color backgroundColor;
   final Color textColor;
 
   const CustomButton({
     super.key,
-    required this.text,
+    required this.child,
     required this.onPressed,
     required this.backgroundColor,
     required this.textColor,
@@ -23,19 +23,12 @@ class CustomButton extends StatelessWidget {
         onPressed: onPressed,
         style: ElevatedButton.styleFrom(
           backgroundColor: backgroundColor,
+          disabledBackgroundColor: backgroundColor.withOpacity(0.7),
           shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(25.r),
           ),
         ),
-        child: Text(
-          text,
-          style: TextStyle(
-            color: textColor,
-            fontSize: 18.sp,
-            fontWeight: FontWeight.bold,
-            fontFamily: 'Zain',
-          ),
-        ),
+        child: child,
       ),
     );
   }

@@ -1,9 +1,11 @@
-import 'package:complaints_sys/core/constants/app_colors.dart';
-import 'package:complaints_sys/core/constants/app_routes.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:go_router/go_router.dart';
+import 'package:provider/provider.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:complaints_sys/core/constants/app_colors.dart';
+import 'package:complaints_sys/core/constants/app_routes.dart';
+import 'package:complaints_sys/core/services/secure_storage_service.dart';
 
 class SplashScreen extends StatefulWidget {
   const SplashScreen({super.key});
@@ -16,15 +18,24 @@ class _SplashScreenState extends State<SplashScreen> {
   @override
   void initState() {
     super.initState();
-    _navigateToLogin();
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      _checkAuthStatus();
+    });
   }
 
-  void _navigateToLogin() {
-    Future.delayed(const Duration(seconds: 3), () {
+  void _checkAuthStatus() async {
+    await Future.delayed(const Duration(seconds: 2));
+    if (mounted) {
+      final storage = context.read<SecureStorageService>();
+      final token = await storage.readToken();
       if (mounted) {
-        context.go(AppRoutes.loginScreen);
+        if (token != null) {
+          context.go(AppRoutes.homeScreen);
+        } else {
+          context.go(AppRoutes.loginScreen);
+        }
       }
-    });
+    }
   }
 
   @override
@@ -38,7 +49,19 @@ class _SplashScreenState extends State<SplashScreen> {
       child: Scaffold(
         backgroundColor: AppColors.primary500,
         body: Center(
-          child: Image.asset('assets/logos/logo.png', height: 120.h),
+          child: Image.asset(
+            'assets/logos/logo.png',
+            height: 120.h,
+            errorBuilder: (context, error, stackTrace) {
+              return Center(
+                child: Icon(
+                  Icons.gavel_rounded,
+                  color: Colors.white,
+                  size: 100.sp,
+                ),
+              );
+            },
+          ),
         ),
       ),
     );
