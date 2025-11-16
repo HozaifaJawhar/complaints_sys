@@ -3,7 +3,7 @@ import 'package:complaints_sys/core/constants/app_routes.dart';
 import 'package:complaints_sys/features/auth/presentation/screens/forgetpassword/forget_password_screen.dart';
 import 'package:complaints_sys/features/auth/presentation/screens/forgetpassword/otp_password_screen.dart';
 import 'package:complaints_sys/features/auth/presentation/screens/forgetpassword/reset_passowrd_screen.dart';
-import 'package:complaints_sys/features/auth/presentation/screens/home_page_screen.dart';
+import 'package:complaints_sys/features/complaints/presentation/screens/home_page_screen.dart';
 import 'package:complaints_sys/features/auth/presentation/screens/login_screen.dart';
 import 'package:complaints_sys/features/auth/presentation/screens/otp_screen.dart';
 import 'package:complaints_sys/features/auth/presentation/screens/register_screen.dart';
