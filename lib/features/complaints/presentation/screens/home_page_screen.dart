@@ -1,4 +1,5 @@
 import 'package:complaints_sys/core/constants/app_colors.dart';
+import 'package:complaints_sys/core/constants/app_themes.dart';
 import 'package:complaints_sys/features/auth/presentation/widgets/custom_textfield.dart';
 import 'package:complaints_sys/features/complaints/presentation/widgets/filtter_wedget.dart';
 import 'package:flutter/material.dart';
@@ -16,6 +17,7 @@ class _HomePageState extends State<HomePage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
+        automaticallyImplyLeading: false,
         actions: [
           Padding(
             padding: const EdgeInsets.all(8.0),
@@ -29,10 +31,9 @@ class _HomePageState extends State<HomePage> {
             ),
           ),
         ],
-        title: Column(
-          children: [
-            Text('مرحباً', style: TextStyle(color: AppColors.primary500)),
-          ],
+        title: Padding(
+          padding: const EdgeInsets.all(20.0),
+          child: Text('مرحباً', style: TextStyle(color: AppColors.primary500)),
         ),
       ),
       body: Column(
@@ -53,6 +54,11 @@ class _HomePageState extends State<HomePage> {
                 FiltterWedget(),
               ],
             ),
+          ),
+          // SizedBox(height: 4.h),
+          Padding(
+            padding: const EdgeInsets.only(top: 8, right: 20),
+            child: Text('الشكاوي ', style: TextTheme.of(context).labelLarge),
           ),
         ],
       ),
