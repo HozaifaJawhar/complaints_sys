@@ -1,4 +1,5 @@
 import 'package:complaints_sys/features/auth/presentation/screens/splash_screen.dart';
+import 'package:complaints_sys/features/complaints/presentation/screens/comlaint_details_screen.dart';
 import 'package:complaints_sys/features/complaints/presentation/screens/complaints_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
@@ -37,6 +38,22 @@ class RouterService {
           final email = state.extra as String? ?? '';
           return _buildPage(state, OTPScreen(email: email));
         },
+      ),
+      GoRoute(
+        path: AppRoutes.complaintDetailsScreen,
+        pageBuilder: (context, state) => CustomTransitionPage(
+          key: state.pageKey,
+          child: const ComlaintDetailsScreen(),
+          transitionDuration: const Duration(milliseconds: 500),
+          transitionsBuilder: (context, animation, secondaryAnimation, child) {
+            return SharedAxisTransition(
+              animation: animation,
+              secondaryAnimation: secondaryAnimation,
+              transitionType: SharedAxisTransitionType.horizontal,
+              child: child,
+            );
+          },
+        ),
       ),
       StatefulShellRoute.indexedStack(
         builder: (context, state, navigationShell) {
