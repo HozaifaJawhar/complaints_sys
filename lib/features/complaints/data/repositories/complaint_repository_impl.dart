@@ -3,8 +3,10 @@ import 'package:complaints_sys/core/errors/exceptions.dart';
 import 'package:complaints_sys/core/errors/failures.dart';
 import 'package:complaints_sys/core/api/api_helper.dart';
 import 'package:complaints_sys/core/services/secure_storage_service.dart';
+import 'package:complaints_sys/features/complaints/data/models/complaint_model.dart';
 import 'package:complaints_sys/features/complaints/data/models/complaint_submission_result_model.dart';
 import 'package:complaints_sys/features/complaints/data/models/dropdown_item_model.dart';
+import 'package:complaints_sys/features/complaints/domain/entities/complain.dart';
 import 'package:complaints_sys/features/complaints/domain/entities/complaint_submission_result.dart';
 import 'package:complaints_sys/features/complaints/domain/entities/dropdown_item.dart';
 import 'package:complaints_sys/features/complaints/domain/repositories/complaint_repository.dart';
@@ -97,7 +99,34 @@ class ComplaintRepositoryImpl implements ComplaintRepository {
     } on ServerException catch (e) {
       return Left(ServerFailure(e.message));
     } catch (e) {
-      return Left(const ServerFailure('حدث خطأ غير متوقع أثناء إرسال الشكوى'));
+      return const Left(ServerFailure('حدث خطأ غير متوقع أثناء إرسال الشكوى'));
+    }
+  }
+
+  @override
+  Future<Either<Failure, List<Complaint>>> getComplaints() async {
+    try {
+      final token = await storage.readToken();
+      const url = ApiConstants.baseUrl + ApiConstants.getComplaintsUrl;
+
+      // استدعاء API
+      final response = await api.get(url: url, token: token);
+
+      // السيرفر بيرجع قائمة JSON مباشرة
+      final List<dynamic> data = response['data'];
+
+      // تحويل JSON إلى موديل ثم Entity
+      final List<Complaint> complaints = data
+          .map((json) => ComplaintModel.fromJson(json))
+          .toList();
+
+      return Right(complaints);
+    } on ServerException catch (e) {
+      return Left(ServerFailure(e.message));
+    } catch (e) {
+      return const Left(
+        ServerFailure('حدث خطأ غير متوقع أثناء جلب الشكاوى'),
+      );
     }
   }
 }

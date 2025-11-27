@@ -43,7 +43,7 @@ class ComplaintCard extends StatelessWidget {
             Container(
               width: 45.w,
               height: 45.w,
-              decoration: BoxDecoration(
+              decoration: const BoxDecoration(
                 color: AppColors.buttonColor,
                 shape: BoxShape.circle,
               ),
@@ -64,7 +64,7 @@ class ComplaintCard extends StatelessWidget {
                 children: [
                   /// Complaint title
                   Text(
-                    'شكوى رقم 1',
+                    'اسم الشكوى',
                     style: TextStyle(
                       fontSize: 15.sp,
                       fontWeight: FontWeight.bold,

@@ -1,3 +1,4 @@
+import 'package:complaints_sys/features/complaints/domain/entities/complain.dart';
 import 'package:dartz/dartz.dart';
 import 'package:complaints_sys/core/errors/failures.dart';
 import 'package:complaints_sys/features/complaints/domain/entities/complaint_submission_result.dart';
@@ -7,6 +8,7 @@ abstract class ComplaintRepository {
   // --- GET ---
   Future<Either<Failure, List<DropdownItem>>> getComplaintTypes();
   Future<Either<Failure, List<DropdownItem>>> getGovernmentEntities();
+  Future<Either<Failure, List<Complaint>>> getComplaints();
 
   // --- POST ---
   Future<Either<Failure, ComplaintSubmissionResult>> submitComplaint({
@@ -17,4 +19,5 @@ abstract class ComplaintRepository {
     required String problemDescription,
     required List<String> attachments,
   });
+
 }

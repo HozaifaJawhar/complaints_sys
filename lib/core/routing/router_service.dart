@@ -74,7 +74,7 @@ class RouterService {
               GoRoute(
                 path: AppRoutes.complaintsListScreen,
                 pageBuilder: (context, state) =>
-                    _buildPage(state, ComplaintsListScreen()),
+                    _buildPage(state, HomePage()),
               ),
             ],
           ),
