@@ -2,11 +2,10 @@ import 'package:complaints_sys/core/constants/app_colors.dart';
 import 'package:complaints_sys/core/constants/app_routes.dart';
 import 'package:complaints_sys/features/auth/presentation/widgets/custom_textfield.dart';
 import 'package:complaints_sys/features/complaints/presentation/provider/get_complaints_provider.dart';
-import 'package:complaints_sys/features/complaints/presentation/widgets/ComplaintCard.dart';
 import 'package:complaints_sys/features/complaints/presentation/widgets/filtter_wedget.dart';
+import 'package:complaints_sys/features/complaints/presentation/widgets/complaints_list_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:go_router/go_router.dart';
 import 'package:provider/provider.dart';
 
 class HomePage extends StatefulWidget {
@@ -33,21 +32,21 @@ class _HomePageState extends State<HomePage> {
     return Scaffold(
       appBar: AppBar(
         automaticallyImplyLeading: false,
-        actions: [
-          Padding(
-            padding: const EdgeInsets.all(8.0),
-            child: IconButton(
-              icon: const Icon(
-                size: 40,
-                Icons.circle_notifications_sharp,
-                color: AppColors.primary500,
-              ),
-              onPressed: () {
-                context.push(AppRoutes.notificationScreen);
-              },
-            ),
-          ),
-        ],
+        // actions: [
+        //   Padding(
+        //     padding: const EdgeInsets.all(8.0),
+        //     child: IconButton(
+        //       icon: const Icon(
+        //         size: 40,
+        //         Icons.circle_notifications_sharp,
+        //         color: AppColors.primary500,
+        //       ),
+        //       onPressed: () {
+        //         context.push(AppRoutes.notificationScreen);
+        //       },
+        //     ),
+        //   ),
+        // ],
         title: const Padding(
           padding: EdgeInsets.all(20.0),
           child: Text(
@@ -68,12 +67,12 @@ class _HomePageState extends State<HomePage> {
               children: [
                 SizedBox(
                   width: 300.w,
-                  child: CustomTextField(
+                  child: const CustomTextField(
                     hintText: 'ابحث هنا',
                     prefixIcon: Icons.search,
                   ),
                 ),
-                FiltterWedget(),
+                const FiltterWedget(),
               ],
             ),
           ),
@@ -91,54 +90,12 @@ class _HomePageState extends State<HomePage> {
           Expanded(
             child: Padding(
               padding: const EdgeInsets.all(12),
-              child: _buildComplaints(complaintsProvider),
+              child:  ComplaintsListWidget(  provider: complaintsProvider,),
             ),
           ),
         ],
       ),
     );
   }
-
-  // --------------------- WIDGET FOR STATES ---------------------
-  Widget _buildComplaints(ComplaintsProvider provider) {
-    switch (provider.state) {
-
-      // LOADING
-      case ComplaintsState.loading:
-        return const Center(child: CircularProgressIndicator());
-
-      // ERROR
-      case ComplaintsState.error:
-        return Center(
-          child: Text(
-            provider.errorMessage ?? "حدث خطأ غير متوقع",
-            style: const TextStyle(color: Colors.red),
-          ),
-        );
-
-      // LOADED
-      case ComplaintsState.loaded:
-        if (provider.complaints.isEmpty) {
-          return const Center(child: Text("لا توجد شكاوى حالياً"));
-        }
-
-        return RefreshIndicator(
-          onRefresh: () async {
-            await provider.loadComplaints();
-          },
-          child: ListView.builder(
-            physics: const AlwaysScrollableScrollPhysics(),
-            itemCount: provider.complaints.length,
-            itemBuilder: (context, index) {
-              final complaint = provider.complaints[index];
-              return ComplaintCard(complaint: complaint);
-            },
-          ),
-        );
-        // INITIAL
-      case ComplaintsState.initial:
-      default:
-        return const Center(child: CircularProgressIndicator());
-    }
-  }
 }
+ 

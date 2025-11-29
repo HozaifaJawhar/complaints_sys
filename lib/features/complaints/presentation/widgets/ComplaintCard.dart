@@ -39,15 +39,15 @@ class ComplaintCard extends StatelessWidget {
           children: [
             /// Icon Circle
             Container(
-              width: 45.w,
-              height: 45.w,
+              width: 30.w,
+              height: 30.w,
               decoration: const BoxDecoration(
                 color: AppColors.buttonColor,
-                shape: BoxShape.circle,
+                shape: BoxShape.rectangle,
               ),
               child: const Icon(
                 Icons.description,
-                color: AppColors.buttonColor,
+                color: AppColors.primary500,
                 size: 24,
               ),
             ),
@@ -62,7 +62,7 @@ class ComplaintCard extends StatelessWidget {
                 children: [
                   /// Complaint id
                   Text(
-                    '${complaint.referenceNumber}',
+                    'الشكوى:  ${complaint.referenceNumber}',
                     style: TextStyle(
                       fontSize: 15.sp,
                       fontWeight: FontWeight.bold,
@@ -84,7 +84,7 @@ class ComplaintCard extends StatelessWidget {
                       ),
                       SizedBox(width: 4.w),
                       Text(
-                          '${complaint.createdAt.year}/${complaint.createdAt.month}/${complaint.createdAt.day}',
+                          'تاريخ التقديم:  ${complaint.createdAt.year}/${complaint.createdAt.month}/${complaint.createdAt.day}',
                         style: TextStyle(
                           fontSize: 12.sp,
                           color: AppColors.buttonColor,

@@ -1,7 +1,7 @@
 import 'package:complaints_sys/features/complaints/domain/entities/complain.dart';
 import 'package:flutter/material.dart';
 import 'package:complaints_sys/features/complaints/domain/usecases/get_complaints_usecase.dart';
-import 'package:complaints_sys/core/errors/failures.dart';
+
 
 enum ComplaintsState { initial, loading, loaded, error }
 
