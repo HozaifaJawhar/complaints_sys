@@ -1,3 +1,5 @@
+import 'package:complaints_sys/features/complaints/domain/usecases/get_complaints_usecase.dart';
+import 'package:complaints_sys/features/complaints/presentation/provider/get_complaints_provider.dart';
 import 'package:provider/provider.dart';
 import 'package:provider/single_child_widget.dart';
 import 'package:complaints_sys/core/api/api_helper.dart';
@@ -62,6 +64,10 @@ class Injector {
       ProxyProvider<ComplaintRepository, SubmitComplaintUseCase>(
         update: (_, repo, __) => SubmitComplaintUseCase(repo),
       ),
+        ProxyProvider<ComplaintRepository, GetComplaintsUseCase>(
+  update: (context, repo, previous) =>
+      GetComplaintsUseCase(repository: repo),
+),
 
       // طبقة  Presentation (Providers) ---
       ChangeNotifierProvider<LoginProvider>(
@@ -76,6 +82,11 @@ class Injector {
       ChangeNotifierProvider<OtpProvider>(
         create: (context) => OtpProvider(context.read<VerifyOtpUseCase>()),
       ),
+      ChangeNotifierProvider<ComplaintsProvider>(
+  create: (context) => ComplaintsProvider(
+    context.read<GetComplaintsUseCase>(),
+  ),
+),
 
       // Provider
       ChangeNotifierProvider<AddComplaintProvider>(

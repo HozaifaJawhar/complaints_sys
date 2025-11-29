@@ -21,28 +21,29 @@ class ComplaintsProvider with ChangeNotifier {
   List<Complaint> get complaints => _complaints;
 
   // ----------------- ACTION: LOAD COMPLAINTS -----------------
-  Future<void> loadComplaints() async {
-    if (_state == ComplaintsState.loading) return;
+ Future<void> loadComplaints() async {
+  print("🔥 loadComplaints CALLED");
 
-    _state = ComplaintsState.loading;
-    _errorMessage = null;
-    notifyListeners();
+  _state = ComplaintsState.loading;
+  notifyListeners();
 
-    final result = await _getComplaints();
+  final result = await _getComplaints();
 
-    result.fold(
-      (Failure failure) {
-        _errorMessage = failure.message;
-        _state = ComplaintsState.error;
-      },
-      (List<Complaint> data) {
-        _complaints = data;
-        _state = ComplaintsState.loaded;
-      },
-    );
+  result.fold(
+    (failure) {
+      print("🔥 ERROR: ${failure.message}");
+      _errorMessage = failure.message;
+      _state = ComplaintsState.error;
+    },
+    (data) {
+      print("🔥 complaints loaded: ${data.length}");
+      _complaints = data;
+      _state = ComplaintsState.loaded;
+    },
+  );
 
-    notifyListeners();
-  }
+  notifyListeners();
+}
 
   // ----------------- CLEAR STATE -----------------
   void clearState() {

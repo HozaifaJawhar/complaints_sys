@@ -103,30 +103,35 @@ class ComplaintRepositoryImpl implements ComplaintRepository {
     }
   }
 
-  @override
-  Future<Either<Failure, List<Complaint>>> getComplaints() async {
-    try {
-      final token = await storage.readToken();
-      const url = ApiConstants.baseUrl + ApiConstants.getComplaintsUrl;
+ @override
+Future<Either<Failure, List<Complaint>>> getComplaints() async {
+  try {
+   
 
-      // استدعاء API
-      final response = await api.get(url: url, token: token);
+    final token = await storage.readToken();
+    final url = ApiConstants.baseUrl + ApiConstants.getComplaintsUrl;
+ 
 
-      // السيرفر بيرجع قائمة JSON مباشرة
-      final List<dynamic> data = response['data'];
+    final response = await api.get(url: url, token: token);
 
-      // تحويل JSON إلى موديل ثم Entity
-      final List<Complaint> complaints = data
+  
+
+   
+    if (response is List) {
+      final list = response
           .map((json) => ComplaintModel.fromJson(json))
           .toList();
 
-      return Right(complaints);
-    } on ServerException catch (e) {
-      return Left(ServerFailure(e.message));
-    } catch (e) {
-      return const Left(
-        ServerFailure('حدث خطأ غير متوقع أثناء جلب الشكاوى'),
-      );
+      return Right(list);
     }
+
+    return Left(ServerFailure("صيغة رد غير متوقعة"));
+  } on ServerException catch (e) {
+  
+    return Left(ServerFailure(e.message));
+  } catch (e) {
+ 
+    return Left(ServerFailure("خطأ غير متوقع أثناء جلب الشكاوى"));
   }
+}
 }

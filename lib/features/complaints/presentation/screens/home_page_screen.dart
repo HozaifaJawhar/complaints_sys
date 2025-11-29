@@ -1,11 +1,13 @@
 import 'package:complaints_sys/core/constants/app_colors.dart';
 import 'package:complaints_sys/core/constants/app_routes.dart';
 import 'package:complaints_sys/features/auth/presentation/widgets/custom_textfield.dart';
+import 'package:complaints_sys/features/complaints/presentation/provider/get_complaints_provider.dart';
 import 'package:complaints_sys/features/complaints/presentation/widgets/ComplaintCard.dart';
 import 'package:complaints_sys/features/complaints/presentation/widgets/filtter_wedget.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:go_router/go_router.dart';
+import 'package:provider/provider.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({super.key});
@@ -15,8 +17,19 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
+
+  @override
+  void initState() {
+    super.initState();
+    Future.microtask(() {
+      context.read<ComplaintsProvider>().loadComplaints();
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
+    final complaintsProvider = context.watch<ComplaintsProvider>();
+
     return Scaffold(
       appBar: AppBar(
         automaticallyImplyLeading: false,
@@ -35,19 +48,25 @@ class _HomePageState extends State<HomePage> {
             ),
           ),
         ],
-        title: Padding(
-          padding: const EdgeInsets.all(20.0),
-          child: Text('مرحباً', style: TextStyle(color: AppColors.primary500)),
+        title: const Padding(
+          padding: EdgeInsets.all(20.0),
+          child: Text(
+            'مرحباً',
+            style: TextStyle(color: AppColors.primary500),
+          ),
         ),
       ),
+
       body: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
+
+          // Search + Filter Bar
           Padding(
             padding: const EdgeInsets.all(8.0),
             child: Row(
               children: [
-                Container(
+                SizedBox(
                   width: 300.w,
                   child: CustomTextField(
                     hintText: 'ابحث هنا',
@@ -58,33 +77,68 @@ class _HomePageState extends State<HomePage> {
               ],
             ),
           ),
-          // SizedBox(height: 4.h),
+
+          // Title
           Padding(
             padding: const EdgeInsets.only(top: 8, right: 20),
-            child: Text('الشكاوي ', style: TextTheme.of(context).labelLarge),
+            child: Text(
+              'الشكاوي',
+              style: TextTheme.of(context).labelLarge,
+            ),
           ),
+
+          // MAIN CONTENT
           Expanded(
             child: Padding(
               padding: const EdgeInsets.all(12),
-              child: ListView.builder(
-                itemCount: 8,
-                itemBuilder: (context, index) {
-                  return ComplaintCard();
-                },
-              ),
+              child: _buildComplaints(complaintsProvider),
             ),
           ),
         ],
       ),
-      floatingActionButton: FloatingActionButton(
-        backgroundColor: AppColors.primary400,
-        onPressed: () {
-          //context.push(AppRoutes.createComplaintScreen);
-        },
-        tooltip: 'Increment',
-        shape: const CircleBorder(),
-        child: const Icon(Icons.add),
-      ),
     );
+  }
+
+  // --------------------- WIDGET FOR STATES ---------------------
+  Widget _buildComplaints(ComplaintsProvider provider) {
+    switch (provider.state) {
+
+      // LOADING
+      case ComplaintsState.loading:
+        return const Center(child: CircularProgressIndicator());
+
+      // ERROR
+      case ComplaintsState.error:
+        return Center(
+          child: Text(
+            provider.errorMessage ?? "حدث خطأ غير متوقع",
+            style: const TextStyle(color: Colors.red),
+          ),
+        );
+
+      // LOADED
+      case ComplaintsState.loaded:
+        if (provider.complaints.isEmpty) {
+          return const Center(child: Text("لا توجد شكاوى حالياً"));
+        }
+
+        return RefreshIndicator(
+          onRefresh: () async {
+            await provider.loadComplaints();
+          },
+          child: ListView.builder(
+            physics: const AlwaysScrollableScrollPhysics(),
+            itemCount: provider.complaints.length,
+            itemBuilder: (context, index) {
+              final complaint = provider.complaints[index];
+              return ComplaintCard(complaint: complaint);
+            },
+          ),
+        );
+        // INITIAL
+      case ComplaintsState.initial:
+      default:
+        return const Center(child: CircularProgressIndicator());
+    }
   }
 }

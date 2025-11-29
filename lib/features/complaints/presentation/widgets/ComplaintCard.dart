@@ -1,19 +1,17 @@
 import 'package:complaints_sys/core/constants/app_colors.dart';
 import 'package:complaints_sys/core/constants/app_routes.dart';
+import 'package:complaints_sys/features/complaints/domain/entities/complain.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:go_router/go_router.dart';
 
 class ComplaintCard extends StatelessWidget {
-  // final String title;
-  // final String date;
-  // final VoidCallback? onTap;
+ final Complaint complaint ;
+  
 
   const ComplaintCard({
-    super.key,
-    // required this.title,
-    // required this.date,
-    // this.onTap,
+    super.key, required this.complaint,
+   
   });
 
   @override
@@ -62,9 +60,9 @@ class ComplaintCard extends StatelessWidget {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  /// Complaint title
+                  /// Complaint id
                   Text(
-                    'اسم الشكوى',
+                    '${complaint.referenceNumber}',
                     style: TextStyle(
                       fontSize: 15.sp,
                       fontWeight: FontWeight.bold,
@@ -86,7 +84,7 @@ class ComplaintCard extends StatelessWidget {
                       ),
                       SizedBox(width: 4.w),
                       Text(
-                        '11/11/2011',
+                          '${complaint.createdAt.year}/${complaint.createdAt.month}/${complaint.createdAt.day}',
                         style: TextStyle(
                           fontSize: 12.sp,
                           color: AppColors.buttonColor,
