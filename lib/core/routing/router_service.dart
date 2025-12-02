@@ -44,7 +44,7 @@ class RouterService {
         path: AppRoutes.complaintDetailsScreen,
         pageBuilder: (context, state) => CustomTransitionPage(
           key: state.pageKey,
-          child: const ComlaintDetailsScreen(),
+          child: const ComplaintDetailsScreen(),
           transitionDuration: const Duration(milliseconds: 500),
           transitionsBuilder: (context, animation, secondaryAnimation, child) {
             return SharedAxisTransition(
@@ -64,9 +64,9 @@ class RouterService {
           StatefulShellBranch(
             routes: [
               GoRoute(
-                path: AppRoutes.homeScreen,
+                path: AppRoutes.complaintsListScreen,
                 pageBuilder: (context, state) =>
-                    _buildPage(state, const HomeScreen()),
+                    _buildPage(state, const HomePage()),
               ),
             ],
           ),

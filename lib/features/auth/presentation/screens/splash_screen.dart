@@ -30,7 +30,7 @@ class _SplashScreenState extends State<SplashScreen> {
       final token = await storage.readToken();
       if (mounted) {
         if (token != null) {
-          context.go(AppRoutes.homeScreen);
+          context.go(AppRoutes.complaintsListScreen);
         } else {
           context.go(AppRoutes.loginScreen);
         }

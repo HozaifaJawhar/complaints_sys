@@ -6,6 +6,7 @@ import 'package:complaints_sys/features/complaints/presentation/widgets/filtter_
 import 'package:complaints_sys/features/complaints/presentation/widgets/complaints_list_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:go_router/go_router.dart';
 import 'package:provider/provider.dart';
 
 class HomePage extends StatefulWidget {
@@ -32,21 +33,21 @@ class _HomePageState extends State<HomePage> {
     return Scaffold(
       appBar: AppBar(
         automaticallyImplyLeading: false,
-        // actions: [
-        //   Padding(
-        //     padding: const EdgeInsets.all(8.0),
-        //     child: IconButton(
-        //       icon: const Icon(
-        //         size: 40,
-        //         Icons.circle_notifications_sharp,
-        //         color: AppColors.primary500,
-        //       ),
-        //       onPressed: () {
-        //         context.push(AppRoutes.notificationScreen);
-        //       },
-        //     ),
-        //   ),
-        // ],
+        actions: [
+          Padding(
+            padding: const EdgeInsets.all(8.0),
+            child: IconButton(
+              icon: const Icon(
+                size: 40,
+                Icons.circle_notifications_sharp,
+                color: AppColors.primary500,
+              ),
+              onPressed: () {
+                context.push(AppRoutes.notificationsScreen);
+              },
+            ),
+          ),
+        ],
         title: const Padding(
           padding: EdgeInsets.all(20.0),
           child: Text(

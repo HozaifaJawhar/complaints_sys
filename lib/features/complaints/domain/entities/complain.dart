@@ -3,12 +3,19 @@ class Complaint {
   final String referenceNumber;
   final DateTime createdAt;
   final String state;
+ final int complaintTypeId;
+ final int governmentEntityId;
+  final String locationDescription;
+  final String problemDescription;
+  final List<String>? attachments;
 
-  
-  const Complaint({
-    required this.state, 
+  Complaint({required this.complaintTypeId, required this.governmentEntityId, 
     required this.id,
     required this.referenceNumber,
     required this.createdAt,
+    required this.state,
+   required this.locationDescription,
+    required this.problemDescription,
+    this.attachments,
   });
 }

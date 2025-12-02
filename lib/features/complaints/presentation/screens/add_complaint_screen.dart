@@ -30,9 +30,9 @@ class _AddComplaintScreenState extends State<AddComplaintScreen> {
   @override
   void initState() {
     super.initState();
-    WidgetsBinding.instance.addPostFrameCallback((_) {
-      context.read<AddComplaintProvider>().loadInitialData();
-    });
+    // WidgetsBinding.instance.addPostFrameCallback((_) {
+    //   context.read<AddComplaintProvider>().loadInitialData();
+    // });
   }
 
   @override

@@ -32,7 +32,7 @@ class _OTPScreenState extends State<OTPScreen> {
     );
 
     if (success && mounted) {
-      context.go(AppRoutes.homeScreen);
+      context.go(AppRoutes.complaintsListScreen);
     }
   }
 

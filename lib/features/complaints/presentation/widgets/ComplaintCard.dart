@@ -18,7 +18,7 @@ class ComplaintCard extends StatelessWidget {
   Widget build(BuildContext context) {
     return GestureDetector(
       onTap: () {
-        context.push(AppRoutes.complaintDetailsScreen);
+        context.push(AppRoutes.complaintDetailsScreen,extra: complaint);
       },
       child: Container(
         height: 80.h,

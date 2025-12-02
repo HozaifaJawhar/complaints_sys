@@ -89,13 +89,18 @@ class Injector {
 ),
 
       // Provider
-      ChangeNotifierProvider<AddComplaintProvider>(
-        create: (context) => AddComplaintProvider(
-          context.read<GetComplaintTypesUseCase>(),
-          context.read<GetGovernmentEntitiesUseCase>(),
-          context.read<SubmitComplaintUseCase>(),
-        ),
-      ),
+     ChangeNotifierProvider<AddComplaintProvider>(
+  create: (context) {
+    final provider = AddComplaintProvider(
+      context.read<GetComplaintTypesUseCase>(),
+      context.read<GetGovernmentEntitiesUseCase>(),
+      context.read<SubmitComplaintUseCase>(),
+    );
+
+    provider.loadInitialData(); // 🔥 تحميل البيانات مباشرة عند بدء التطبيق
+    return provider;
+  },
+),
     ];
   }
 }

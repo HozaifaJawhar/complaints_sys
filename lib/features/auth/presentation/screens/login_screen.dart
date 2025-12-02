@@ -36,7 +36,7 @@ class _LoginScreenState extends State<LoginScreen> {
         _passwordController.text,
       );
       if (success && mounted) {
-        context.go(AppRoutes.homeScreen);
+        context.go(AppRoutes.complaintsListScreen);
       }
     }
   }
