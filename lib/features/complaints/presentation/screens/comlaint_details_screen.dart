@@ -1,6 +1,5 @@
 import 'package:complaints_sys/core/constants/app_colors.dart';
 import 'package:complaints_sys/features/complaints/domain/entities/complain.dart';
-import 'package:complaints_sys/features/complaints/domain/entities/dropdown_item.dart';
 import 'package:complaints_sys/features/complaints/presentation/provider/add_complaint_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -13,6 +12,8 @@ class ComplaintDetailsScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+  @override
+
     final Complaint complaint =
         GoRouterState.of(context).extra as Complaint;
 
@@ -20,23 +21,23 @@ class ComplaintDetailsScreen extends StatelessWidget {
 
 final entity = dropdownProvider.governmentEntities.firstWhere(
   (e) => e.id == complaint.governmentEntityId,
-  orElse: () => DropdownItem(id: -1, name: "غير معروف"),
+  
 );
 
 final type = dropdownProvider.complaintTypes.firstWhere(
   (e) => e.id == complaint.complaintTypeId,
-  orElse: () => DropdownItem(id: -1, name: "غير معروف"),
+
 );
 final entityName = entity.name;
 final typeName = type.name;
    
 
-if (dropdownProvider.dataLoadingState != DataLoadingState.loaded) {
-  return Scaffold(
-    appBar: AppBar(title: const Text("تفاصيل الشكوى")),
-    body: const Center(child: CircularProgressIndicator()),
-  );
-} 
+// if (dropdownProvider.dataLoadingState != DataLoadingState.loaded) {
+//   return Scaffold(
+//     appBar: AppBar(title: const Text("تفاصيل الشكوى")),
+//     body: const Center(child: CircularProgressIndicator()),
+//   );
+// } 
     return Scaffold(
       backgroundColor: Colors.grey.shade100,
       appBar: AppBar(
