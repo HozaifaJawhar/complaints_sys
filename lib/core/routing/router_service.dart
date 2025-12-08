@@ -1,5 +1,5 @@
 import 'package:complaints_sys/features/auth/presentation/screens/splash_screen.dart';
-import 'package:complaints_sys/features/complaints/presentation/screens/comlaint_details_screen.dart';
+import 'package:complaints_sys/features/complaints/presentation/screens/complaint_details_screen.dart';
 
 import 'package:complaints_sys/features/complaints/presentation/screens/home_page_screen.dart';
 import 'package:flutter/material.dart';
@@ -74,8 +74,7 @@ class RouterService {
             routes: [
               GoRoute(
                 path: AppRoutes.complaintsListScreen,
-                pageBuilder: (context, state) =>
-                    _buildPage(state, HomePage()),
+                pageBuilder: (context, state) => _buildPage(state, HomePage()),
               ),
             ],
           ),

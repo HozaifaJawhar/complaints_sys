@@ -6,7 +6,7 @@ import 'package:complaints_sys/core/services/secure_storage_service.dart';
 import 'package:complaints_sys/features/complaints/data/models/complaint_model.dart';
 import 'package:complaints_sys/features/complaints/data/models/complaint_submission_result_model.dart';
 import 'package:complaints_sys/features/complaints/data/models/dropdown_item_model.dart';
-import 'package:complaints_sys/features/complaints/domain/entities/complain.dart';
+import 'package:complaints_sys/features/complaints/domain/entities/complaint.dart';
 import 'package:complaints_sys/features/complaints/domain/entities/complaint_submission_result.dart';
 import 'package:complaints_sys/features/complaints/domain/entities/dropdown_item.dart';
 import 'package:complaints_sys/features/complaints/domain/repositories/complaint_repository.dart';
@@ -26,9 +26,8 @@ class ComplaintRepositoryImpl implements ComplaintRepository {
       final response = await api.get(url: url, token: token);
 
       final List<dynamic> data = response['data'];
-      final List<DropdownItem> types = data
-          .map((itemJson) => DropdownItemModel.fromJson(itemJson))
-          .toList();
+      final List<DropdownItem> types =
+          data.map((itemJson) => DropdownItemModel.fromJson(itemJson)).toList();
 
       return Right(types);
     } on ServerException catch (e) {
@@ -48,9 +47,8 @@ class ComplaintRepositoryImpl implements ComplaintRepository {
       final response = await api.get(url: url, token: token);
 
       final List<dynamic> data = response['data'];
-      final List<DropdownItem> entities = data
-          .map((itemJson) => DropdownItemModel.fromJson(itemJson))
-          .toList();
+      final List<DropdownItem> entities =
+          data.map((itemJson) => DropdownItemModel.fromJson(itemJson)).toList();
 
       return Right(entities);
     } on ServerException catch (e) {
@@ -103,35 +101,26 @@ class ComplaintRepositoryImpl implements ComplaintRepository {
     }
   }
 
- @override
-Future<Either<Failure, List<Complaint>>> getComplaints() async {
-  try {
-   
+  @override
+  Future<Either<Failure, List<Complaint>>> getComplaints() async {
+    try {
+      final token = await storage.readToken();
+      final url = ApiConstants.baseUrl + ApiConstants.getComplaintsUrl;
 
-    final token = await storage.readToken();
-    final url = ApiConstants.baseUrl + ApiConstants.getComplaintsUrl;
- 
+      final response = await api.get(url: url, token: token);
 
-    final response = await api.get(url: url, token: token);
+      if (response is List) {
+        final list =
+            response.map((json) => ComplaintModel.fromJson(json)).toList();
 
-  
+        return Right(list);
+      }
 
-   
-    if (response is List) {
-      final list = response
-          .map((json) => ComplaintModel.fromJson(json))
-          .toList();
-
-      return Right(list);
+      return Left(ServerFailure("صيغة رد غير متوقعة"));
+    } on ServerException catch (e) {
+      return Left(ServerFailure(e.message));
+    } catch (e) {
+      return Left(ServerFailure("خطأ غير متوقع أثناء جلب الشكاوى"));
     }
-
-    return Left(ServerFailure("صيغة رد غير متوقعة"));
-  } on ServerException catch (e) {
-  
-    return Left(ServerFailure(e.message));
-  } catch (e) {
- 
-    return Left(ServerFailure("خطأ غير متوقع أثناء جلب الشكاوى"));
   }
-}
 }

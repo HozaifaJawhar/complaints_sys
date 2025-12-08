@@ -1,24 +1,23 @@
 import 'package:complaints_sys/core/constants/app_colors.dart';
 import 'package:complaints_sys/core/constants/app_routes.dart';
-import 'package:complaints_sys/features/complaints/domain/entities/complain.dart';
+import 'package:complaints_sys/features/complaints/domain/entities/complaint.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:go_router/go_router.dart';
 
 class ComplaintCard extends StatelessWidget {
- final Complaint complaint ;
-  
+  final Complaint complaint;
 
   const ComplaintCard({
-    super.key, required this.complaint,
-   
+    super.key,
+    required this.complaint,
   });
 
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
       onTap: () {
-        context.push(AppRoutes.complaintDetailsScreen,extra: complaint);
+        context.push(AppRoutes.complaintDetailsScreen, extra: complaint);
       },
       child: Container(
         height: 80.h,
@@ -84,7 +83,7 @@ class ComplaintCard extends StatelessWidget {
                       ),
                       SizedBox(width: 4.w),
                       Text(
-                          'تاريخ التقديم:  ${complaint.createdAt.year}/${complaint.createdAt.month}/${complaint.createdAt.day}',
+                        'تاريخ التقديم:  ${complaint.createdAt.year}/${complaint.createdAt.month}/${complaint.createdAt.day}',
                         style: TextStyle(
                           fontSize: 12.sp,
                           color: AppColors.buttonColor,

@@ -30,7 +30,6 @@ class _AddComplaintScreenState extends State<AddComplaintScreen> {
   @override
   void initState() {
     super.initState();
-   
   }
 
   @override
@@ -144,31 +143,32 @@ class _AddComplaintScreenState extends State<AddComplaintScreen> {
                 bottom: 120.h,
               ),
               children: [
-                TextFormField(
-                  controller: _nameController,
-                  validator: (value) => value == null || value.isEmpty
-                      ? 'الرجاء إدخال العنوان'
-                      : null,
-                  style: const TextStyle(
-                      color: Colors.black87, fontFamily: 'Zain'),
-                  decoration: InputDecoration()
-                      .applyDefaults(theme.inputDecorationTheme)
-                      .copyWith(
-                        hintText: 'عنوان الشكوى (مثال: تعطل إنارة)',
-                        prefixIcon: const Icon(Icons.title),
-                        enabledBorder: greyBorder,
-                        focusedBorder: greyBorder.copyWith(
-                          borderSide: const BorderSide(
-                              color: AppColors.primary500, width: 1.5),
-                        ),
-                        errorBorder: redErrorBorder,
-                        focusedErrorBorder: redErrorBorder,
-                      ),
-                ),
+                // TextFormField(
+                //   controller: _nameController,
+                //   validator: (value) => value == null || value.isEmpty
+                //       ? 'الرجاء إدخال العنوان'
+                //       : null,
+                //   style: const TextStyle(
+                //       color: Colors.black87, fontFamily: 'Zain'),
+                //   decoration: InputDecoration()
+                //       .applyDefaults(theme.inputDecorationTheme)
+                //       .copyWith(
+                //         hintText: 'عنوان الشكوى (مثال: تعطل إنارة)',
+                //         prefixIcon: const Icon(Icons.title),
+                //         enabledBorder: greyBorder,
+                //         focusedBorder: greyBorder.copyWith(
+                //           borderSide: const BorderSide(
+                //               color: AppColors.primary500, width: 1.5),
+                //         ),
+                //         errorBorder: redErrorBorder,
+                //         focusedErrorBorder: redErrorBorder,
+                //       ),
+                // ),
                 SizedBox(height: 16.h),
                 DropdownButtonFormField<DropdownItem>(
                   value: _selectedComplaintType,
                   hint: const Text('اختر نوع الشكوى'),
+                  isExpanded: true,
                   decoration: InputDecoration()
                       .applyDefaults(theme.inputDecorationTheme)
                       .copyWith(
@@ -200,6 +200,7 @@ class _AddComplaintScreenState extends State<AddComplaintScreen> {
                 DropdownButtonFormField<DropdownItem>(
                   value: _selectedEntity,
                   hint: const Text('اختر الجهة المعنية'),
+                  isExpanded: true,
                   decoration: InputDecoration()
                       .applyDefaults(theme.inputDecorationTheme)
                       .copyWith(

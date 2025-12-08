@@ -1,4 +1,4 @@
-import 'package:complaints_sys/features/complaints/domain/entities/complain.dart';
+import 'package:complaints_sys/features/complaints/domain/entities/complaint.dart';
 import 'package:complaints_sys/features/complaints/domain/repositories/complaint_repository.dart';
 import 'package:complaints_sys/core/errors/failures.dart';
 import 'package:dartz/dartz.dart';
