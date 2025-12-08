@@ -1,5 +1,5 @@
 import 'package:complaints_sys/core/constants/app_colors.dart';
-import 'package:complaints_sys/features/complaints/domain/entities/complain.dart';
+import 'package:complaints_sys/features/complaints/domain/entities/complaint.dart';
 import 'package:complaints_sys/features/complaints/presentation/provider/add_complaint_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -12,32 +12,34 @@ class ComplaintDetailsScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-  @override
+    @override
+    final Complaint complaint = GoRouterState.of(context).extra as Complaint;
 
-    final Complaint complaint =
-        GoRouterState.of(context).extra as Complaint;
+    final dropdownProvider = context.read<AddComplaintProvider>();
 
-  final dropdownProvider = context.read<AddComplaintProvider>();
+    // Prefer names returned from backend; fall back to local lookup by id.
+    final entityName = complaint.governmentEntityName ??
+        dropdownProvider.governmentEntities
+            .firstWhere(
+              (e) => e.id == complaint.governmentEntityId,
+              orElse: () => dropdownProvider.governmentEntities.first,
+            )
+            .name;
 
-final entity = dropdownProvider.governmentEntities.firstWhere(
-  (e) => e.id == complaint.governmentEntityId,
-  
-);
-
-final type = dropdownProvider.complaintTypes.firstWhere(
-  (e) => e.id == complaint.complaintTypeId,
-
-);
-final entityName = entity.name;
-final typeName = type.name;
-   
+    final typeName = complaint.complaintTypeName ??
+        dropdownProvider.complaintTypes
+            .firstWhere(
+              (e) => e.id == complaint.complaintTypeId,
+              orElse: () => dropdownProvider.complaintTypes.first,
+            )
+            .name;
 
 // if (dropdownProvider.dataLoadingState != DataLoadingState.loaded) {
 //   return Scaffold(
 //     appBar: AppBar(title: const Text("تفاصيل الشكوى")),
 //     body: const Center(child: CircularProgressIndicator()),
 //   );
-// } 
+// }
     return Scaffold(
       backgroundColor: Colors.grey.shade100,
       appBar: AppBar(
@@ -49,13 +51,11 @@ final typeName = type.name;
         backgroundColor: Colors.white,
         iconTheme: const IconThemeData(color: AppColors.primary500),
       ),
-
       body: SingleChildScrollView(
         padding: EdgeInsets.all(16.w),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-
             // ================= HEADER BOX =================
             Container(
               width: double.infinity,
@@ -83,9 +83,7 @@ final typeName = type.name;
                       fontWeight: FontWeight.bold,
                     ),
                   ),
-
                   SizedBox(height: 14.h),
-
                   Row(
                     children: [
                       Icon(Icons.info, color: getStatusColor(complaint.state)),
@@ -131,14 +129,14 @@ final typeName = type.name;
             _buildSection(
               title: "الموقع",
               icon: Icons.location_on,
-              value: complaint.locationDescription ?? "غير محدد",
+              value: complaint.locationDescription,
             ),
 
             // =================== وصف المشكلة ===================
             _buildSection(
               title: "وصف المشكلة",
               icon: Icons.description,
-              value: complaint.problemDescription ?? "لا يوجد وصف",
+              value: complaint.problemDescription,
             ),
 
             SizedBox(height: 20.h),
@@ -230,7 +228,6 @@ final typeName = type.name;
             ),
           ),
           SizedBox(height: 10.h),
-
           if (attachments.isEmpty)
             Text("لا يوجد مرفقات", style: TextStyle(fontSize: 14.sp))
           else

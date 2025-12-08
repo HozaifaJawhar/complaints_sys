@@ -109,10 +109,22 @@ class ComplaintRepositoryImpl implements ComplaintRepository {
 
       final response = await api.get(url: url, token: token);
 
+      // API may return the list directly or wrap it inside a `data` object.
+      List<dynamic>? items;
       if (response is List) {
-        final list =
-            response.map((json) => ComplaintModel.fromJson(json)).toList();
+        items = response;
+      } else if (response is Map<String, dynamic>) {
+        if (response['data'] is List) {
+          items = response['data'] as List<dynamic>;
+        } else if (response['data'] is Map<String, dynamic> &&
+            (response['data'] as Map<String, dynamic>)['data'] is List) {
+          items = (response['data'] as Map<String, dynamic>)['data'] as List;
+        }
+      }
 
+      if (items != null) {
+        final list =
+            items.map((json) => ComplaintModel.fromJson(json)).toList();
         return Right(list);
       }
 
