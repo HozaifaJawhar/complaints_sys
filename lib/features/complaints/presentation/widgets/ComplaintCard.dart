@@ -20,7 +20,7 @@ class ComplaintCard extends StatelessWidget {
         context.push(AppRoutes.complaintDetailsScreen, extra: complaint);
       },
       child: Container(
-        height: 80.h,
+        height: 92.h,
         padding: EdgeInsets.symmetric(horizontal: 12.w, vertical: 8.h),
         margin: EdgeInsets.only(bottom: 12.h),
         decoration: BoxDecoration(
@@ -69,6 +69,30 @@ class ComplaintCard extends StatelessWidget {
                     ),
                     maxLines: 1,
                     overflow: TextOverflow.ellipsis,
+                  ),
+
+                  SizedBox(height: 6.h),
+
+                  /// Status
+                  Row(
+                    children: [
+                      const Icon(
+                        Icons.info,
+                        size: 16,
+                        color: AppColors.buttonColor,
+                      ),
+                      SizedBox(width: 4.w),
+                      Text(
+                        'حالة الشكوى: ${complaint.state}',
+                        style: TextStyle(
+                          fontSize: 12.sp,
+                          color: AppColors.buttonColor,
+                          fontWeight: FontWeight.w600,
+                        ),
+                        maxLines: 1,
+                        overflow: TextOverflow.ellipsis,
+                      ),
+                    ],
                   ),
 
                   SizedBox(height: 6.h),

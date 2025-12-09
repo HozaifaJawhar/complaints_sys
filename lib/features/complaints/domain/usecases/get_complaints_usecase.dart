@@ -8,7 +8,7 @@ class GetComplaintsUseCase {
 
   GetComplaintsUseCase({required this.repository});
 
-  Future<Either<Failure, List<Complaint>>> call() async {
-    return await repository.getComplaints();
+  Future<Either<Failure, List<Complaint>>> call({String? status}) async {
+    return await repository.getComplaints(status: status);
   }
 }

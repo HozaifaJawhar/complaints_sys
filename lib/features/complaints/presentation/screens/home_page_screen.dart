@@ -17,13 +17,39 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
+  late final TextEditingController _searchController;
+  DateTime? _lastLoadTime;
 
   @override
   void initState() {
     super.initState();
+    _searchController = TextEditingController();
+    // Load complaints when screen is first created
+    _loadComplaints();
+  }
+
+  // Removed didChangeDependencies to prevent infinite loop of reloading and resetting search query
+  // when the provider notifies listeners. The provider state is preserved, and RefreshIndicator is available.
+
+  void _loadComplaints() {
+    final now = DateTime.now();
+    // Prevent reloading if we just loaded less than 500ms ago
+    if (_lastLoadTime != null &&
+        now.difference(_lastLoadTime!).inMilliseconds < 500) {
+      return;
+    }
+    _lastLoadTime = now;
     Future.microtask(() {
-      context.read<ComplaintsProvider>().loadComplaints();
+      if (mounted) {
+        context.read<ComplaintsProvider>().loadComplaints();
+      }
     });
+  }
+
+  @override
+  void dispose() {
+    _searchController.dispose();
+    super.dispose();
   }
 
   @override
@@ -56,11 +82,9 @@ class _HomePageState extends State<HomePage> {
           ),
         ),
       ),
-
       body: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-
           // Search + Filter Bar
           Padding(
             padding: const EdgeInsets.all(8.0),
@@ -68,12 +92,20 @@ class _HomePageState extends State<HomePage> {
               children: [
                 SizedBox(
                   width: 300.w,
-                  child: const CustomTextField(
-                    hintText: 'ابحث هنا',
+                  child: CustomTextField(
+                    controller: _searchController,
+                    hintText: 'أدخل الرقم المرجعي للشكوى',
                     prefixIcon: Icons.search,
+                    onChanged: (value) {
+                      complaintsProvider.updateSearchQuery(value);
+                    },
                   ),
                 ),
-                const FiltterWedget(),
+                FiltterWedget(
+                  onFilterSelected: (status) {
+                    complaintsProvider.loadComplaints(status: status);
+                  },
+                ),
               ],
             ),
           ),
@@ -91,7 +123,9 @@ class _HomePageState extends State<HomePage> {
           Expanded(
             child: Padding(
               padding: const EdgeInsets.all(12),
-              child:  ComplaintsListWidget(  provider: complaintsProvider,),
+              child: ComplaintsListWidget(
+                provider: complaintsProvider,
+              ),
             ),
           ),
         ],
@@ -99,4 +133,3 @@ class _HomePageState extends State<HomePage> {
     );
   }
 }
- 

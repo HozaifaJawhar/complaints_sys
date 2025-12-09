@@ -5,7 +5,7 @@ import 'package:complaints_sys/features/complaints/presentation/widgets/Complain
 class ComplaintsListWidget extends StatelessWidget {
   final ComplaintsProvider provider;
 
-  const ComplaintsListWidget( {super.key, required this.provider});
+  const ComplaintsListWidget({super.key, required this.provider});
 
   @override
   Widget build(BuildContext context) {
@@ -22,8 +22,16 @@ class ComplaintsListWidget extends StatelessWidget {
         );
 
       case ComplaintsState.loaded:
-        if (provider.complaints.isEmpty) {
-          return const Center(child: Text("لا توجد شكاوى حالياً"));
+        final complaints = provider.filteredComplaints;
+
+        if (complaints.isEmpty) {
+          return Center(
+            child: Text(
+              provider.searchQuery.isEmpty
+                  ? "لا توجد شكاوى حالياً"
+                  : "لا توجد شكاوى مطابقة لرقم البحث",
+            ),
+          );
         }
 
         return RefreshIndicator(
@@ -32,16 +40,15 @@ class ComplaintsListWidget extends StatelessWidget {
           },
           child: ListView.builder(
             physics: const AlwaysScrollableScrollPhysics(),
-            itemCount: provider.complaints.length,
+            itemCount: complaints.length,
             itemBuilder: (context, index) {
-              final complaint = provider.complaints[index];
+              final complaint = complaints[index];
               return ComplaintCard(complaint: complaint);
             },
           ),
         );
 
       case ComplaintsState.initial:
-      default:
         return const Center(child: CircularProgressIndicator());
     }
   }

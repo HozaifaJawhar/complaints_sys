@@ -3,7 +3,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 class FiltterWedget extends StatelessWidget {
-  const FiltterWedget({super.key});
+  final Function(String?) onFilterSelected;
+
+  const FiltterWedget({super.key, required this.onFilterSelected});
 
   @override
   Widget build(BuildContext context) {
@@ -46,8 +48,18 @@ class FiltterWedget extends StatelessWidget {
               mainAxisSize: MainAxisSize.min,
               children: [
                 RadioListTile<String>(
+                  title: const Text('قيد الانتطار'),
+                  value: 'انتظار',
+                  groupValue: selectedStatus,
+                  onChanged: (value) {
+                    setState(() {
+                      selectedStatus = value;
+                    });
+                  },
+                ),
+                RadioListTile<String>(
                   title: const Text('قيد المعالجة'),
-                  value: 'pending',
+                  value: 'قيد المعالجة',
                   groupValue: selectedStatus,
                   onChanged: (value) {
                     setState(() {
@@ -57,7 +69,7 @@ class FiltterWedget extends StatelessWidget {
                 ),
                 RadioListTile<String>(
                   title: const Text('منجزة'),
-                  value: 'approved',
+                  value: 'منجزة',
                   groupValue: selectedStatus,
                   onChanged: (value) {
                     setState(() {
@@ -67,7 +79,17 @@ class FiltterWedget extends StatelessWidget {
                 ),
                 RadioListTile<String>(
                   title: const Text('مرفوضة'),
-                  value: 'rejected',
+                  value: 'مرفوضة',
+                  groupValue: selectedStatus,
+                  onChanged: (value) {
+                    setState(() {
+                      selectedStatus = value;
+                    });
+                  },
+                ),
+                RadioListTile<String>(
+                  title: const Text('الكل'),
+                  value: '',
                   groupValue: selectedStatus,
                   onChanged: (value) {
                     setState(() {
@@ -88,6 +110,7 @@ class FiltterWedget extends StatelessWidget {
                 onPressed: () {
                   // هنا يمكنك تطبيق الفلترة حسب selectedStatus
                   print('تم اختيار: $selectedStatus');
+                  onFilterSelected(selectedStatus);
                   Navigator.pop(context);
                 },
                 child: const Text('تأكيد'),

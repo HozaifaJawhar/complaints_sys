@@ -2,6 +2,7 @@ import 'dart:convert';
 import 'package:complaints_sys/core/errors/exceptions.dart';
 import 'package:flutter/foundation.dart';
 import 'package:http/http.dart' as http;
+import 'package:http_parser/http_parser.dart';
 import 'package:path/path.dart';
 
 class Api {
@@ -63,10 +64,26 @@ class Api {
     request.fields.addAll(fields);
 
     for (int i = 0; i < filePaths.length; i++) {
+      final path = filePaths[i];
+      final extension = path.split('.').last.toLowerCase();
+
+      MediaType? contentType;
+      if (extension == 'pdf') {
+        contentType = MediaType('application', 'pdf');
+      } else if (['jpg', 'jpeg', 'png'].contains(extension)) {
+        contentType =
+            MediaType('image', extension == 'jpg' ? 'jpeg' : extension);
+      }
+
+      // Sanitize filename: remove spaces and special characters to avoid server issues
+      final sanitizedFilename =
+          basename(path).replaceAll(RegExp(r'[^a-zA-Z0-9._-]'), '_');
+
       var file = await http.MultipartFile.fromPath(
-        '${filesKey}[$i]', // attachments[0], attachments[1]
-        filePaths[i],
-        filename: basename(filePaths[i]),
+        '${filesKey}[$i]', // Revert to indexed keys: attachments[0], attachments[1]
+        path,
+        filename: sanitizedFilename,
+        contentType: contentType,
       );
       request.files.add(file);
     }

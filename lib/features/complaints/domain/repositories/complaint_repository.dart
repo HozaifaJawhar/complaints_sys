@@ -8,7 +8,7 @@ abstract class ComplaintRepository {
   // --- GET ---
   Future<Either<Failure, List<DropdownItem>>> getComplaintTypes();
   Future<Either<Failure, List<DropdownItem>>> getGovernmentEntities();
-  Future<Either<Failure, List<Complaint>>> getComplaints();
+  Future<Either<Failure, List<Complaint>>> getComplaints({String? status});
 
   // --- POST ---
   Future<Either<Failure, ComplaintSubmissionResult>> submitComplaint({

@@ -17,7 +17,6 @@ class NotificationsScreen extends StatelessWidget {
       ),
       body: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
-
         children: [
           Padding(
             padding: const EdgeInsets.all(8.0),
@@ -30,7 +29,9 @@ class NotificationsScreen extends StatelessWidget {
                     prefixIcon: Icons.search,
                   ),
                 ),
-                FiltterWedget(),
+                FiltterWedget(
+                  onFilterSelected: (val) {},
+                ),
               ],
             ),
           ),

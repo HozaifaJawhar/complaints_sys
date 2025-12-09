@@ -102,12 +102,23 @@ class ComplaintRepositoryImpl implements ComplaintRepository {
   }
 
   @override
-  Future<Either<Failure, List<Complaint>>> getComplaints() async {
+  Future<Either<Failure, List<Complaint>>> getComplaints(
+      {String? status}) async {
     try {
       final token = await storage.readToken();
-      final url = ApiConstants.baseUrl + ApiConstants.getComplaintsUrl;
+      final uri =
+          Uri.parse(ApiConstants.baseUrl + ApiConstants.getComplaintsUrl)
+              .replace(queryParameters: {
+        if (status != null && status.isNotEmpty) 'status': status,
+      });
 
-      final response = await api.get(url: url, token: token);
+      // We need to convert Uri to string because api.get takes a string (based on my reading of Api class)
+      // Wait, api.get takes a String url and does Uri.parse(url).
+      // If I pass uri.toString(), it will be encoded.
+      // e.g. ...?status=%D8%...
+      // Uri.parse() on that string should work.
+
+      final response = await api.get(url: uri.toString(), token: token);
 
       // API may return the list directly or wrap it inside a `data` object.
       List<dynamic>? items;

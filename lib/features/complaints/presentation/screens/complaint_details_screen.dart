@@ -1,3 +1,4 @@
+import 'package:complaints_sys/core/constants/api_constants.dart';
 import 'package:complaints_sys/core/constants/app_colors.dart';
 import 'package:complaints_sys/features/complaints/domain/entities/complaint.dart';
 import 'package:complaints_sys/features/complaints/presentation/provider/add_complaint_provider.dart';
@@ -241,15 +242,33 @@ class ComplaintDetailsScreen extends StatelessWidget {
 
   // =================== ATTACHMENT CARD ===================
   Widget _buildAttachmentCard(BuildContext context, String file) {
-    final fullUrl = file.startsWith("http")
-        ? file
-        : "http://10.0.2.2:8000/$file"; // عدلي حسب سيرفرك
+    // Construct full URL dynamically
+    String fullUrl = file;
+    if (file.startsWith("http")) {
+      // Fix: If backend returns localhost/127.0.0.1, replace it with 10.0.2.2 for emulator
+      // or the configured base URL host.
+      if (file.contains("127.0.0.1") || file.contains("localhost")) {
+        fullUrl =
+            file.replaceFirst(RegExp(r'127\.0\.0\.1|localhost'), '10.0.2.2');
+      }
+    } else {
+      // Use ApiConstants.baseUrl but remove '/api' suffix to get root URL
+      final baseUrl = ApiConstants.baseUrl.replaceAll('/api', '');
+      var path = file;
+      if (path.startsWith('/')) path = path.substring(1);
+      fullUrl = "$baseUrl/$path";
+    }
 
-    final isImage = file.endsWith(".jpg") ||
-        file.endsWith(".png") ||
-        file.endsWith(".jpeg");
+    // Fix case sensitivity: Replace /Storage/ with /storage/ if present
+    // This is a common issue with Laravel on different OS
+    fullUrl = fullUrl.replaceAll('/Storage/', '/storage/');
 
-    final isPdf = file.endsWith(".pdf");
+    final isImage = fullUrl.toLowerCase().endsWith(".jpg") ||
+        fullUrl.toLowerCase().endsWith(".png") ||
+        fullUrl.toLowerCase().endsWith(".jpeg");
+
+    final isPdf = fullUrl.toLowerCase().endsWith(".pdf");
+
     return Container(
       padding: EdgeInsets.all(12.w),
       margin: EdgeInsets.only(bottom: 12.h),
@@ -270,6 +289,14 @@ class ComplaintDetailsScreen extends StatelessWidget {
                   width: 60.w,
                   height: 60.w,
                   fit: BoxFit.cover,
+                  errorBuilder: (context, error, stackTrace) {
+                    return Container(
+                      width: 60.w,
+                      height: 60.w,
+                      color: Colors.grey.shade300,
+                      child: const Icon(Icons.broken_image, color: Colors.grey),
+                    );
+                  },
                 ),
               ),
             )
