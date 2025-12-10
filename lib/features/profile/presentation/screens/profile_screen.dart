@@ -23,7 +23,7 @@ class ProfileScreen extends StatelessWidget {
     final theme = Theme.of(context);
 
     return Scaffold(
-      backgroundColor: AppColors.fillColor.withOpacity(0.5),
+      // backgroundColor: AppColors.fillColor.withOpacity(0.5),
       appBar: AppBar(
         title: const Text('الملف الشخصي'),
         centerTitle: true,

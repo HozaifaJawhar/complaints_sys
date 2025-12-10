@@ -112,7 +112,7 @@ class _AddComplaintScreenState extends State<AddComplaintScreen> {
       ),
     );
     return Scaffold(
-      backgroundColor: AppColors.fillColor.withOpacity(0.5),
+      //backgroundColor: AppColors.fillColor.withOpacity(0.5),
       appBar: AppBar(
         title: const Text('إضافة شكوى جديدة'),
         centerTitle: true,

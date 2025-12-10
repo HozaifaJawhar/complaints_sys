@@ -19,7 +19,7 @@ class HomePage extends StatefulWidget {
 class _HomePageState extends State<HomePage> {
   late final TextEditingController _searchController;
   DateTime? _lastLoadTime;
-
+String? selectedFilter;
   @override
   void initState() {
     super.initState();
@@ -56,79 +56,95 @@ class _HomePageState extends State<HomePage> {
   Widget build(BuildContext context) {
     final complaintsProvider = context.watch<ComplaintsProvider>();
 
-    return Scaffold(
-      appBar: AppBar(
-        automaticallyImplyLeading: false,
-        actions: [
-          Padding(
-            padding: const EdgeInsets.all(8.0),
-            child: IconButton(
-              icon: const Icon(
-                size: 40,
-                Icons.circle_notifications_sharp,
-                color: AppColors.primary500,
+    return GestureDetector(
+ 
+
+      onTap: () {
+           FocusScope.of(context).unfocus();
+      },
+      child: Scaffold(
+        //  backgroundColor: AppColors.fillColor.withOpacity(0.5),
+        appBar: AppBar(
+          automaticallyImplyLeading: false,
+          actions: [
+            Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: IconButton(
+                icon: const Icon(
+                  size: 40,
+                  Icons.circle_notifications_sharp,
+                  color: AppColors.primary500,
+                ),
+                onPressed: () {
+                  context.push(AppRoutes.notificationsScreen);
+                },
               ),
-              onPressed: () {
-                context.push(AppRoutes.notificationsScreen);
-              },
             ),
-          ),
-        ],
-        title: const Padding(
-          padding: EdgeInsets.all(20.0),
-          child: Text(
-            'مرحباً',
-            style: TextStyle(color: AppColors.primary500),
+          ],
+          title: const Padding(
+            padding: EdgeInsets.all(20.0),
+            child: Text(
+              'مرحباً',
+              style: TextStyle(color: AppColors.primary500),
+            ),
           ),
         ),
-      ),
-      body: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          // Search + Filter Bar
-          Padding(
-            padding: const EdgeInsets.all(8.0),
-            child: Row(
-              children: [
-                SizedBox(
-                  width: 300.w,
-                  child: CustomTextField(
-                    controller: _searchController,
-                    hintText: 'أدخل الرقم المرجعي للشكوى',
-                    prefixIcon: Icons.search,
-                    onChanged: (value) {
-                      complaintsProvider.updateSearchQuery(value);
-                    },
+        body: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            // Search + Filter Bar
+            Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: Row(
+                children: [
+                  SizedBox(
+                    width: 300.w,
+                    child: CustomTextField(
+                      controller: _searchController,
+                      hintText: 'أدخل الرقم المرجعي للشكوى',
+                      prefixIcon: Icons.search,
+                      onChanged: (value) {
+                        complaintsProvider.updateSearchQuery(value);
+                      },
+                    ),
                   ),
-                ),
-                FiltterWedget(
-                  onFilterSelected: (status) {
-                    complaintsProvider.loadComplaints(status: status);
-                  },
-                ),
-              ],
-            ),
-          ),
+                  FiltterWedget(
+              onFilterSelected: (status) {
+  String? apiStatus = (status == "الكل" || status == null) ? null : status;
 
-          // Title
-          Padding(
-            padding: const EdgeInsets.only(top: 8, right: 20),
-            child: Text(
-              'الشكاوي',
-              style: TextTheme.of(context).labelLarge,
-            ),
-          ),
+  setState(() {
+    selectedFilter = apiStatus;
+  });
 
-          // MAIN CONTENT
-          Expanded(
-            child: Padding(
-              padding: const EdgeInsets.all(12),
-              child: ComplaintsListWidget(
-                provider: complaintsProvider,
+  complaintsProvider.loadComplaints(status: apiStatus);
+},
+                  ),
+                ],
               ),
             ),
-          ),
-        ],
+      
+            // Title
+            Padding(
+              padding: const EdgeInsets.only(top: 8, right: 20),
+       child: Text(
+    selectedFilter == null || selectedFilter == ""
+        ? 'الشكاوي (الكل)'
+        : 'الشكاوي (${selectedFilter!})',
+    style: Theme.of(context).textTheme.labelLarge,
+  ),
+            ),
+      
+            // MAIN CONTENT
+            Expanded(
+              child: Padding(
+                padding: const EdgeInsets.all(12),
+                child: ComplaintsListWidget(
+                  provider: complaintsProvider,
+                ),
+              ),
+            ),
+          ],
+        ),
       ),
     );
   }

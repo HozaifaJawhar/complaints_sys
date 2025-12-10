@@ -37,7 +37,7 @@ class MainShellScreen extends StatelessWidget {
         padding: const EdgeInsets.symmetric(horizontal: 10),
         height: 65.h,
         elevation: 8,
-        color: Colors.white,
+        color:   AppColors.fillColor,
         child: Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: <Widget>[
