@@ -1,6 +1,4 @@
-import 'package:complaints_sys/features/complaints/domain/usecases/add_attachments_usecase.dart';
 import 'package:complaints_sys/features/complaints/domain/usecases/get_complaints_usecase.dart';
-import 'package:complaints_sys/features/complaints/presentation/provider/add_attachments_provider.dart';
 import 'package:complaints_sys/features/complaints/presentation/provider/get_complaints_provider.dart';
 import 'package:provider/provider.dart';
 import 'package:provider/single_child_widget.dart';
@@ -32,6 +30,9 @@ class Injector {
       Provider<Api>(create: (_) => Api()),
       Provider<SecureStorageService>(create: (_) => SecureStorageService()),
 
+      // Notification Service
+      Provider<NotificationService>(create: (_) => NotificationService()),
+
       //طبقة  Data (Repositories) ---
       ProxyProvider2<Api, SecureStorageService, AuthRepository>(
         update: (_, api, storage, __) =>
@@ -56,6 +57,7 @@ class Injector {
       ProxyProvider<AuthRepository, VerifyOtpUseCase>(
         update: (_, repo, __) => VerifyOtpUseCase(repo),
       ),
+
       // (Complaint UseCases)
       ProxyProvider<ComplaintRepository, GetComplaintTypesUseCase>(
         update: (_, repo, __) => GetComplaintTypesUseCase(repo),
@@ -66,16 +68,10 @@ class Injector {
       ProxyProvider<ComplaintRepository, SubmitComplaintUseCase>(
         update: (_, repo, __) => SubmitComplaintUseCase(repo),
       ),
-        ProxyProvider<ComplaintRepository, GetComplaintsUseCase>(
-       update: (context, repo, previous) =>
-      GetComplaintsUseCase(repository: repo),
-      ), 
-      ProxyProvider<ComplaintRepository, AddAttachmentsUseCase>(
-       update: (_, repo, __) => AddAttachmentsUseCase(repository: repo),
+      ProxyProvider<ComplaintRepository, GetComplaintsUseCase>(
+        update: (context, repo, previous) =>
+            GetComplaintsUseCase(repository: repo),
       ),
-
-
-
 
       // طبقة  Presentation (Providers) ---
       ChangeNotifierProvider<LoginProvider>(
@@ -91,16 +87,10 @@ class Injector {
         create: (context) => OtpProvider(context.read<VerifyOtpUseCase>()),
       ),
       ChangeNotifierProvider<ComplaintsProvider>(
-  create: (context) => ComplaintsProvider(
-    context.read<GetComplaintsUseCase>(),
-  ),
-),
-ChangeNotifierProvider<AddAttachmentsProvider>(
-  create: (context) => AddAttachmentsProvider(
-    context.read<AddAttachmentsUseCase>(),
-  ),
-),
-
+        create: (context) => ComplaintsProvider(
+          context.read<GetComplaintsUseCase>(),
+        ),
+      ),
 
       // Provider
      ChangeNotifierProvider<AddComplaintProvider>(

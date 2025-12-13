@@ -1,10 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:complaints_sys/features/auth/domain/usecases/login_usecase.dart';
+import 'package:complaints_sys/core/services/notification_service.dart';
 
 class LoginProvider with ChangeNotifier {
   final LoginUseCase _loginUseCase;
+  final NotificationService _notificationService;
 
-  LoginProvider(this._loginUseCase);
+  LoginProvider(this._loginUseCase, this._notificationService);
 
   bool _isLoading = false;
   String? _errorMessage;
@@ -17,12 +19,14 @@ class LoginProvider with ChangeNotifier {
     _errorMessage = null;
     notifyListeners();
 
-    final result = await _loginUseCase.execute(email, password);
+    final token = await _notificationService.getToken();
+    final result =
+        await _loginUseCase.execute(email, password, deviceToken: token);
     _isLoading = false;
 
     return result.fold(
       (failure) {
-        _errorMessage = 'البريد الالكتروني أو كلمة المرور خاطئة';
+        _errorMessage = failure.message;
         notifyListeners();
         return false;
       },

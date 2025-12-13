@@ -17,11 +17,16 @@ class AuthRepositoryImpl implements AuthRepository {
   @override
   Future<Either<Failure, AuthResult>> login(
     String email,
-    String password,
-  ) async {
+    String password, {
+    String? deviceToken,
+  }) async {
     try {
       final url = ApiConstants.baseUrl + ApiConstants.loginUrl;
-      final body = {'email': email, 'password': password};
+      final body = {
+        'email': email,
+        'password': password,
+        if (deviceToken != null) 'device_token': deviceToken,
+      };
       final response = await api.post(url: url, body: body, token: null);
       final authResult = AuthResultModel.fromJson(response);
       await storage.writeToken(authResult.token);
@@ -68,10 +73,15 @@ class AuthRepositoryImpl implements AuthRepository {
   Future<Either<Failure, AuthResult>> verifyOtp({
     required String email,
     required String otpCode,
+    String? deviceToken,
   }) async {
     try {
       final url = ApiConstants.baseUrl + ApiConstants.verifyOtpUrl;
-      final body = {'email': email, 'otp_code': otpCode};
+      final body = {
+        'email': email,
+        'otp_code': otpCode,
+        if (deviceToken != null) 'device_token': deviceToken,
+      };
       final response = await api.post(url: url, body: body, token: null);
       final authResult = AuthResultModel.fromJson(response);
       await storage.writeToken(authResult.token);
@@ -88,13 +98,19 @@ class AuthRepositoryImpl implements AuthRepository {
   @override
   Future<Either<Failure, void>> logout() async {
     try {
-      // 1. حذف التوكن من الجهاز
+      // 1. الحصول على التوكن الحالي
+      final token = await storage.readToken();
+
+      // 2. استدعاء API لإعلام السيرفر بتسجيل الخروج
+      if (token != null) {
+        final url = ApiConstants.baseUrl + ApiConstants.logoutUrl;
+        await api.post(url: url, body: {}, token: token);
+      }
+
+      // 3. حذف التوكن من الجهاز
       await storage.deleteToken();
 
-      // 2. (اختياري) يمكنك هنا استدعاء API لإعلام السيرفر بتسجيل الخروج
-      // await api.post(url: '.../logout', body: {}, token: ...);
-
-      // 3. إرجاع نجاح
+      // 4. إرجاع نجاح
       return Right(null);
     } catch (e) {
       // 4. إرجاع خطأ في حال فشل الحذف

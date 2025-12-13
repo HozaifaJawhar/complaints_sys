@@ -5,13 +5,20 @@ import 'package:provider/provider.dart';
 import 'package:complaints_sys/core/constants/app_themes.dart';
 import 'package:complaints_sys/core/routing/router_service.dart';
 import 'package:complaints_sys/core/di/injection_container.dart';
+import 'package:firebase_core/firebase_core.dart';
+import 'package:complaints_sys/core/services/notification_service.dart';
 
 final RouterService _routerService = RouterService();
 
-void main() {
+void main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  await Firebase.initializeApp();
+
+  // Initialize Notification Service (FCM)
+  // We will initialize it in MyApp using the DI instance to ensure dependencies are resolved.
+
   runApp(MyApp());
 }
-
 
 class MyApp extends StatelessWidget {
   MyApp({super.key});
@@ -25,6 +32,11 @@ class MyApp extends StatelessWidget {
         minTextAdapt: true,
         splitScreenMode: true,
         builder: (context, child) {
+          // Initialize Notification Service
+          WidgetsBinding.instance.addPostFrameCallback((_) {
+            context.read<NotificationService>().initialize();
+          });
+
           return MaterialApp.router(
             debugShowCheckedModeBanner: false,
             title: 'Government Complaints',

@@ -11,7 +11,12 @@ class VerifyOtpUseCase {
   Future<Either<Failure, AuthResult>> execute({
     required String email,
     required String otpCode,
+    String? deviceToken,
   }) async {
-    return await repository.verifyOtp(email: email, otpCode: otpCode);
+    return await repository.verifyOtp(
+      email: email,
+      otpCode: otpCode,
+      deviceToken: deviceToken,
+    );
   }
 }

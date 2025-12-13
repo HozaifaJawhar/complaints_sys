@@ -10,8 +10,9 @@ class LoginUseCase {
 
   Future<Either<Failure, AuthResult>> execute(
     String email,
-    String password,
-  ) async {
-    return await repository.login(email, password);
+    String password, {
+    String? deviceToken,
+  }) async {
+    return await repository.login(email, password, deviceToken: deviceToken);
   }
 }
