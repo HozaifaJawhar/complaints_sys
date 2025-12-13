@@ -4,6 +4,7 @@ import 'package:provider/provider.dart';
 import 'package:provider/single_child_widget.dart';
 import 'package:complaints_sys/core/api/api_helper.dart';
 import 'package:complaints_sys/core/services/secure_storage_service.dart';
+import 'package:complaints_sys/core/services/notification_service.dart';
 import 'package:complaints_sys/features/auth/data/repositories/auth_repository_impl.dart';
 import 'package:complaints_sys/features/complaints/data/repositories/complaint_repository_impl.dart';
 import 'package:complaints_sys/features/auth/domain/repositories/auth_repository.dart';
@@ -74,8 +75,14 @@ class Injector {
       ),
 
       // طبقة  Presentation (Providers) ---
-      ChangeNotifierProvider<LoginProvider>(
-        create: (context) => LoginProvider(context.read<LoginUseCase>()),
+      ChangeNotifierProxyProvider2<LoginUseCase, NotificationService,
+          LoginProvider>(
+        create: (_) => LoginProvider(
+          Provider.of<LoginUseCase>(_, listen: false),
+          Provider.of<NotificationService>(_, listen: false),
+        ),
+        update: (_, loginUseCase, notificationService, __) =>
+            LoginProvider(loginUseCase, notificationService),
       ),
       ChangeNotifierProvider<ProfileProvider>(
         create: (context) => ProfileProvider(context.read<LogoutUseCase>()),
@@ -83,8 +90,14 @@ class Injector {
       ChangeNotifierProvider<RegisterProvider>(
         create: (context) => RegisterProvider(context.read<RegisterUseCase>()),
       ),
-      ChangeNotifierProvider<OtpProvider>(
-        create: (context) => OtpProvider(context.read<VerifyOtpUseCase>()),
+      ChangeNotifierProxyProvider2<VerifyOtpUseCase, NotificationService,
+          OtpProvider>(
+        create: (_) => OtpProvider(
+          Provider.of<VerifyOtpUseCase>(_, listen: false),
+          Provider.of<NotificationService>(_, listen: false),
+        ),
+        update: (_, verifyOtpUseCase, notificationService, __) =>
+            OtpProvider(verifyOtpUseCase, notificationService),
       ),
       ChangeNotifierProvider<ComplaintsProvider>(
         create: (context) => ComplaintsProvider(
@@ -93,18 +106,19 @@ class Injector {
       ),
 
       // Provider
-     ChangeNotifierProvider<AddComplaintProvider>(
-  create: (context) {
-    final provider = AddComplaintProvider(
-      context.read<GetComplaintTypesUseCase>(),
-      context.read<GetGovernmentEntitiesUseCase>(),
-      context.read<SubmitComplaintUseCase>(),
-    );
+      ChangeNotifierProvider<AddComplaintProvider>(
+        create: (context) {
+          final provider = AddComplaintProvider(
+            context.read<GetComplaintTypesUseCase>(),
+            context.read<GetGovernmentEntitiesUseCase>(),
+            context.read<SubmitComplaintUseCase>(),
+          );
 
-    provider.loadInitialData(); // 🔥 تحميل البيانات مباشرة عند بدء التطبيق
-    return provider;
-  },
-),
+          provider
+              .loadInitialData(); // 🔥 تحميل البيانات مباشرة عند بدء التطبيق
+          return provider;
+        },
+      ),
     ];
   }
 }
