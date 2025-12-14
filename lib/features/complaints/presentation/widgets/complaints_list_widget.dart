@@ -21,24 +21,31 @@ class ComplaintsListWidget extends StatelessWidget {
           ),
         );
 
-      case ComplaintsState.loaded:
-        final complaints = provider.filteredComplaints;
+case ComplaintsState.loaded:
+  final complaints = provider.filteredComplaints;
 
-        if (complaints.isEmpty) {
-          return Center(
-            child: Text(
-              provider.searchQuery.isEmpty
-                  ? "لا توجد شكاوى حالياً"
-                  : "لا توجد شكاوى مطابقة لرقم البحث",
-            ),
-          );
-        }
-
-        return RefreshIndicator(
-          onRefresh: () async {
-            await provider.loadComplaints();
-          },
-          child: ListView.builder(
+  return RefreshIndicator(
+    onRefresh: () async {
+      await provider.loadComplaints();
+    },
+    child: complaints.isEmpty
+        ? ListView(
+            physics: const AlwaysScrollableScrollPhysics(),
+            children: [
+              SizedBox(
+                height: MediaQuery.of(context).size.height * 0.5,
+                child: Center(
+                  child: Text(
+                    provider.searchQuery.isEmpty
+                        ? "لا توجد شكاوى حالياً\nاسحب للتحديث"
+                        : "لا توجد شكاوى مطابقة\nاسحب للتحديث",
+                    textAlign: TextAlign.center,
+                  ),
+                ),
+              ),
+            ],
+          )
+        : ListView.builder(
             physics: const AlwaysScrollableScrollPhysics(),
             itemCount: complaints.length,
             itemBuilder: (context, index) {
@@ -46,7 +53,8 @@ class ComplaintsListWidget extends StatelessWidget {
               return ComplaintCard(complaint: complaint);
             },
           ),
-        );
+  );
+
 
       case ComplaintsState.initial:
         return const Center(child: CircularProgressIndicator());

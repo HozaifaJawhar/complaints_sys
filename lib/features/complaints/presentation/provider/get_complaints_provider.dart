@@ -44,7 +44,7 @@ class ComplaintsProvider with ChangeNotifier {
     }
 
     print(
-        "🔥 loadComplaints CALLED with status: $status, current: $_currentStatus");
+        " loadComplaints CALLED with status: $status, current: $_currentStatus");
 
     _state = ComplaintsState.loading;
     _searchQuery = '';
@@ -54,12 +54,12 @@ class ComplaintsProvider with ChangeNotifier {
 
     result.fold(
       (failure) {
-        print("🔥 ERROR: ${failure.message}");
+        print(" ERROR: ${failure.message}");
         _errorMessage = failure.message;
         _state = ComplaintsState.error;
       },
       (data) {
-        print("🔥 complaints loaded: ${data.length}");
+        print(" complaints loaded: ${data.length}");
         _complaints = data;
         _state = ComplaintsState.loaded;
       },
