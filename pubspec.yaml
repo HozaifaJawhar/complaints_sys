@@ -28,7 +28,10 @@ dependencies:
   file_picker: ^8.0.0
   path: ^1.9.0
    # --- مكتبات التعامل مع الملفات  ---
- 
+  url_launcher: ^6.1.10
+  syncfusion_flutter_pdfviewer: ^31.2.18
+  webview_flutter: ^4.7.0
+  path_provider: ^2.0.16
 
   # أيقونات
   cupertino_icons: ^1.0.8

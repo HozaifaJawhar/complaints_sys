@@ -16,6 +16,10 @@ class ApiConstants {
   static const String addComplaintUrl = "/store/complaint";
   static const String getGovEntitiesUrl = "/government-entities";
   static const String getComplaintTypesUrl = "/complaint-types";
+  static const String addAttachmentsUrl = "/addAttachments/";
+
+
+
   //get coplaints
   static const String getComplaintsUrl = "/filter_complaint_status";
 }

@@ -43,7 +43,7 @@ class _AddComplaintScreenState extends State<AddComplaintScreen> {
 
   void _submitComplaint() async {
     final provider = context.read<AddComplaintProvider>();
-
+FocusScope.of(context).unfocus();
     // --- 2. التعديل هنا ---
     if (_formKey.currentState!.validate()) {
       // --- إذا نجح التحقق ---

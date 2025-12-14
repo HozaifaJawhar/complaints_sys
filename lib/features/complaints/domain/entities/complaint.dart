@@ -9,7 +9,7 @@ class Complaint {
   final String? governmentEntityName;
   final String locationDescription;
   final String problemDescription;
-  final List<String>? attachments;
+   List<String>? attachments;
 
   Complaint({
     required this.id,

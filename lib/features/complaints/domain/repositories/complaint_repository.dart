@@ -1,3 +1,4 @@
+import 'package:complaints_sys/features/complaints/domain/entities/add_atachments_result.dart';
 import 'package:complaints_sys/features/complaints/domain/entities/complaint.dart';
 import 'package:dartz/dartz.dart';
 import 'package:complaints_sys/core/errors/failures.dart';
@@ -19,4 +20,10 @@ abstract class ComplaintRepository {
     required String problemDescription,
     required List<String> attachments,
   });
+  // --- POST (Add attachments to existing complaint)
+  Future<Either<Failure, AddAtachmentsResult>> addAttachments({
+    required int complaintId,
+    required List<String> attachments,
+  });
 }
+

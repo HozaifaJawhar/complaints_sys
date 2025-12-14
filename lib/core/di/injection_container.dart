@@ -1,4 +1,6 @@
+import 'package:complaints_sys/features/complaints/domain/usecases/add_attachments_usecase.dart';
 import 'package:complaints_sys/features/complaints/domain/usecases/get_complaints_usecase.dart';
+import 'package:complaints_sys/features/complaints/presentation/provider/add_attachments_provider.dart';
 import 'package:complaints_sys/features/complaints/presentation/provider/get_complaints_provider.dart';
 import 'package:provider/provider.dart';
 import 'package:provider/single_child_widget.dart';
@@ -65,9 +67,15 @@ class Injector {
         update: (_, repo, __) => SubmitComplaintUseCase(repo),
       ),
         ProxyProvider<ComplaintRepository, GetComplaintsUseCase>(
-  update: (context, repo, previous) =>
+       update: (context, repo, previous) =>
       GetComplaintsUseCase(repository: repo),
-),
+      ), 
+      ProxyProvider<ComplaintRepository, AddAttachmentsUseCase>(
+       update: (_, repo, __) => AddAttachmentsUseCase(repository: repo),
+      ),
+
+
+
 
       // طبقة  Presentation (Providers) ---
       ChangeNotifierProvider<LoginProvider>(
@@ -87,6 +95,12 @@ class Injector {
     context.read<GetComplaintsUseCase>(),
   ),
 ),
+ChangeNotifierProvider<AddAttachmentsProvider>(
+  create: (context) => AddAttachmentsProvider(
+    context.read<AddAttachmentsUseCase>(),
+  ),
+),
+
 
       // Provider
      ChangeNotifierProvider<AddComplaintProvider>(

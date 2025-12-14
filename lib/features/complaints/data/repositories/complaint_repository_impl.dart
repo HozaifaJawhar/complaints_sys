@@ -3,9 +3,11 @@ import 'package:complaints_sys/core/errors/exceptions.dart';
 import 'package:complaints_sys/core/errors/failures.dart';
 import 'package:complaints_sys/core/api/api_helper.dart';
 import 'package:complaints_sys/core/services/secure_storage_service.dart';
+import 'package:complaints_sys/features/complaints/data/models/add_atachments_result_model.dart';
 import 'package:complaints_sys/features/complaints/data/models/complaint_model.dart';
 import 'package:complaints_sys/features/complaints/data/models/complaint_submission_result_model.dart';
 import 'package:complaints_sys/features/complaints/data/models/dropdown_item_model.dart';
+import 'package:complaints_sys/features/complaints/domain/entities/add_atachments_result.dart';
 import 'package:complaints_sys/features/complaints/domain/entities/complaint.dart';
 import 'package:complaints_sys/features/complaints/domain/entities/complaint_submission_result.dart';
 import 'package:complaints_sys/features/complaints/domain/entities/dropdown_item.dart';
@@ -146,4 +148,45 @@ class ComplaintRepositoryImpl implements ComplaintRepository {
       return Left(ServerFailure("خطأ غير متوقع أثناء جلب الشكاوى"));
     }
   }
+  
+@override
+Future<Either<Failure, AddAtachmentsResult>> addAttachments({
+  required int complaintId,
+  required List<String> attachments,
+}) async {
+  try {
+    final token = await storage.readToken();
+   final url = ApiConstants.baseUrl + ApiConstants.addAttachmentsUrl + "$complaintId";
+
+
+    print(" Upload attachments to: $url");
+    print(" files: $attachments");
+
+ 
+    final Map<String, String> fields = {};
+
+    final response = await api.postMultipart(
+      url: url,
+      fields: fields,
+      filePaths: attachments,
+      filesKey: "attachments",
+      token: token,
+    );
+
+    print(" API Response: $response");
+
+    final result = AddAtachmentsResultModel.fromJson(response);
+    return Right(result);
+
+  } on ServerException catch (e) {
+    return Left(ServerFailure(e.message));
+
+  } catch (e) {
+    print(" UNKNOWN ERROR: $e");
+    return Left(
+      const ServerFailure("حدث خطأ غير متوقع أثناء رفع المرفقات"),
+    );
+  }
+}
+
 }

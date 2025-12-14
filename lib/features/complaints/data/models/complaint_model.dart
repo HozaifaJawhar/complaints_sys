@@ -50,4 +50,6 @@ class ComplaintModel extends Complaint {
       attachments: parsedAttachments,
     );
   }
+  
+
 }

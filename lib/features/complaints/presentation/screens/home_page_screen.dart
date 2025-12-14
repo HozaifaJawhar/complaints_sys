@@ -49,6 +49,7 @@ String? selectedFilter;
   @override
   void dispose() {
     _searchController.dispose();
+    
     super.dispose();
   }
 
@@ -105,6 +106,7 @@ String? selectedFilter;
                       prefixIcon: Icons.search,
                       onChanged: (value) {
                         complaintsProvider.updateSearchQuery(value);
+                        
                       },
                     ),
                   ),
