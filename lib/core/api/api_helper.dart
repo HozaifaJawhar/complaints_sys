@@ -53,6 +53,7 @@ class Api {
     required List<String> filePaths,
     required String filesKey, // "attachments"
     @required String? token,
+    bool useIndex = true,
   }) async {
     var request = http.MultipartRequest("POST", Uri.parse(url));
 
@@ -80,13 +81,19 @@ class Api {
           basename(path).replaceAll(RegExp(r'[^a-zA-Z0-9._-]'), '_');
 
       var file = await http.MultipartFile.fromPath(
-        '${filesKey}[$i]', // Revert to indexed keys: attachments[0], attachments[1]
+        useIndex
+            ? '${filesKey}[$i]'
+            : '${filesKey}[]', // Revert to indexed keys: attachments[0], attachments[1]
         path,
         filename: sanitizedFilename,
         contentType: contentType,
       );
       request.files.add(file);
     }
+
+    print("DEBUG: Multipart Request Fields: ${request.fields}");
+    print(
+        "DEBUG: Multipart Request Files: ${request.files.map((f) => '${f.field}: ${f.filename}').toList()}");
 
     var streamedResponse = await request.send();
     var response = await http.Response.fromStream(streamedResponse);

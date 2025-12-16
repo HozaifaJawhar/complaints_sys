@@ -1,19 +1,40 @@
+import 'package:complaints_sys/core/services/notification_storage_service.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
+
+import 'package:complaints_sys/features/notifications/data/models/notification_item_adapter.dart';
+import 'package:hive_flutter/hive_flutter.dart';
 
 // Top-level function for background handling
 @pragma('vm:entry-point')
 Future<void> _firebaseMessagingBackgroundHandler(RemoteMessage message) async {
   debugPrint("Handling a background message: ${message.messageId}");
+
+  // Initialize Hive for background isolate if needed
+  await Hive.initFlutter();
+  if (!Hive.isAdapterRegistered(0)) {
+    Hive.registerAdapter(NotificationItemAdapter());
+  }
+
+  final storageService = NotificationStorageService();
+  await storageService.init();
+
+  if (message.notification != null) {
+    await storageService.saveNotification(
+      title: message.notification!.title ?? 'No Title',
+      body: message.notification!.body ?? 'No Body',
+    );
+  }
 }
 
 class NotificationService {
   final FirebaseMessaging _firebaseMessaging = FirebaseMessaging.instance;
   final FlutterLocalNotificationsPlugin _localNotifications =
       FlutterLocalNotificationsPlugin();
+  final NotificationStorageService _storageService;
 
-  NotificationService();
+  NotificationService(this._storageService);
 
   Future<void> initialize() async {
     // 1. Request permission
@@ -71,6 +92,12 @@ class NotificationService {
       // If `onMessage` is triggered with a notification, construct our own
       // local notification to show a heads-up banner.
       if (notification != null && android != null) {
+        // Save to local storage
+        _storageService.saveNotification(
+          title: notification.title ?? 'No Title',
+          body: notification.body ?? 'No Body',
+        );
+
         _localNotifications.show(
           notification.hashCode,
           notification.title,

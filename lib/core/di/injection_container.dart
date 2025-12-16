@@ -4,6 +4,7 @@ import 'package:provider/provider.dart';
 import 'package:provider/single_child_widget.dart';
 import 'package:complaints_sys/core/api/api_helper.dart';
 import 'package:complaints_sys/core/services/secure_storage_service.dart';
+import 'package:complaints_sys/core/services/notification_storage_service.dart';
 import 'package:complaints_sys/core/services/notification_service.dart';
 import 'package:complaints_sys/features/auth/data/repositories/auth_repository_impl.dart';
 import 'package:complaints_sys/features/complaints/data/repositories/complaint_repository_impl.dart';
@@ -21,6 +22,9 @@ import 'package:complaints_sys/features/profile/presentation/provider/profile_pr
 import 'package:complaints_sys/features/auth/presentation/provider/register_provider.dart';
 import 'package:complaints_sys/features/auth/presentation/provider/otp_provider.dart';
 import 'package:complaints_sys/features/complaints/presentation/provider/add_complaint_provider.dart';
+import 'package:complaints_sys/features/complaints/domain/usecases/add_attachments_usecase.dart';
+import 'package:complaints_sys/features/complaints/presentation/provider/add_attachments_provider.dart';
+import 'package:complaints_sys/core/services/notification_storage_service.dart'; // Added import for NotificationStorageService
 
 class Injector {
   Injector._();
@@ -29,10 +33,15 @@ class Injector {
     return [
       // (Core Services)
       Provider<Api>(create: (_) => Api()),
+      Provider<NotificationStorageService>(
+          create: (_) =>
+              NotificationStorageService()), // Registered NotificationStorageService
       Provider<SecureStorageService>(create: (_) => SecureStorageService()),
 
       // Notification Service
-      Provider<NotificationService>(create: (_) => NotificationService()),
+      Provider<NotificationService>(
+          create: (context) =>
+              NotificationService(context.read<NotificationStorageService>())),
 
       //طبقة  Data (Repositories) ---
       ProxyProvider2<Api, SecureStorageService, AuthRepository>(
@@ -85,7 +94,10 @@ class Injector {
             LoginProvider(loginUseCase, notificationService),
       ),
       ChangeNotifierProvider<ProfileProvider>(
-        create: (context) => ProfileProvider(context.read<LogoutUseCase>()),
+        create: (context) => ProfileProvider(
+          context.read<LogoutUseCase>(),
+          context.read<NotificationStorageService>(),
+        ),
       ),
       ChangeNotifierProvider<RegisterProvider>(
         create: (context) => RegisterProvider(context.read<RegisterUseCase>()),
@@ -118,6 +130,16 @@ class Injector {
               .loadInitialData(); // 🔥 تحميل البيانات مباشرة عند بدء التطبيق
           return provider;
         },
+      ),
+
+      // Add Attachments
+      ProxyProvider<ComplaintRepository, AddAttachmentsUseCase>(
+        update: (_, repo, __) => AddAttachmentsUseCase(repository: repo),
+      ),
+      ChangeNotifierProvider<AddAttachmentsProvider>(
+        create: (context) => AddAttachmentsProvider(
+          context.read<AddAttachmentsUseCase>(),
+        ),
       ),
     ];
   }

@@ -3,15 +3,25 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 class NotifyWedget extends StatelessWidget {
-  const NotifyWedget({super.key});
+  final String title;
+  final String body;
+  final DateTime date;
+
+  const NotifyWedget({
+    super.key,
+    required this.title,
+    required this.body,
+    required this.date,
+  });
 
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
       onTap: () {},
       child: Container(
-        height: 77.h,
+        // height: 77.h, // Removed fixed height to accommodate dynamic content
         margin: const EdgeInsets.symmetric(vertical: 5),
+        padding: const EdgeInsets.all(10),
         decoration: BoxDecoration(
           color: AppColors.primary500,
           borderRadius: BorderRadius.circular(12),
@@ -21,22 +31,28 @@ class NotifyWedget extends StatelessWidget {
         ),
         child: Row(
           children: [
-            const SizedBox(width: 15),
-
+            const SizedBox(width: 5),
             Expanded(
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Padding(
-                    padding: const EdgeInsets.all(5.0),
-                    child: Text(
-                      'تم استلام الشكوى رقم 1',
-                      style: const TextStyle(
-                        fontSize: 16,
-                        fontWeight: FontWeight.bold,
-                        color: AppColors.buttonColor,
-                      ),
+                  Text(
+                    title,
+                    style: const TextStyle(
+                      fontSize: 16,
+                      fontWeight: FontWeight.bold,
+                      color: AppColors.buttonColor,
                     ),
+                  ),
+                  const SizedBox(height: 4),
+                  Text(
+                    body,
+                    style: const TextStyle(
+                      fontSize: 14,
+                      color: Colors.white70,
+                    ),
+                    maxLines: 2,
+                    overflow: TextOverflow.ellipsis,
                   ),
                   const SizedBox(height: 6),
                   Row(
@@ -48,15 +64,14 @@ class NotifyWedget extends StatelessWidget {
                       ),
                       const SizedBox(width: 3),
                       Text(
-                        '11/11/2011',
-                        style: TextStyle(
+                        "${date.year}/${date.month}/${date.day}",
+                        style: const TextStyle(
                           fontSize: 12,
                           color: AppColors.buttonColor,
                         ),
                       ),
                     ],
                   ),
-                  const SizedBox(height: 6),
                 ],
               ),
             ),

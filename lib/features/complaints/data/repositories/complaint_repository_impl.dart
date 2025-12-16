@@ -148,45 +148,48 @@ class ComplaintRepositoryImpl implements ComplaintRepository {
       return Left(ServerFailure("خطأ غير متوقع أثناء جلب الشكاوى"));
     }
   }
-  
-@override
-Future<Either<Failure, AddAtachmentsResult>> addAttachments({
-  required int complaintId,
-  required List<String> attachments,
-}) async {
-  try {
-    final token = await storage.readToken();
-   final url = ApiConstants.baseUrl + ApiConstants.addAttachmentsUrl + "$complaintId";
 
+  @override
+  Future<Either<Failure, AddAtachmentsResult>> addAttachments({
+    required int complaintId,
+    required List<String> attachments,
+  }) async {
+    try {
+      final token = await storage.readToken();
+      final url = ApiConstants.baseUrl +
+          ApiConstants.addAttachmentsUrl +
+          "$complaintId";
 
-    print(" Upload attachments to: $url");
-    print(" files: $attachments");
+      print(" Upload attachments to: $url");
+      print(" files: $attachments");
 
- 
-    final Map<String, String> fields = {};
+      final Map<String, String> fields = {};
 
-    final response = await api.postMultipart(
-      url: url,
-      fields: fields,
-      filePaths: attachments,
-      filesKey: "attachments",
-      token: token,
-    );
+      print("DEBUG: Uploading attachments to $url");
+      print("DEBUG: Complaint ID: $complaintId");
+      print("DEBUG: Files: $attachments");
+      print("DEBUG: Token: ${token?.substring(0, 10)}...");
 
-    print(" API Response: $response");
+      final response = await api.postMultipart(
+        url: url,
+        fields: fields,
+        filePaths: attachments,
+        filesKey: "attachments",
+        token: token,
+        useIndex: false,
+      );
 
-    final result = AddAtachmentsResultModel.fromJson(response);
-    return Right(result);
+      print("DEBUG: API Response: $response");
 
-  } on ServerException catch (e) {
-    return Left(ServerFailure(e.message));
-
-  } catch (e) {
-    print(" UNKNOWN ERROR: $e");
-    return Left(
-      const ServerFailure("حدث خطأ غير متوقع أثناء رفع المرفقات"),
-    );
+      final result = AddAtachmentsResultModel.fromJson(response);
+      return Right(result);
+    } on ServerException catch (e) {
+      return Left(ServerFailure(e.message));
+    } catch (e) {
+      print(" UNKNOWN ERROR: $e");
+      return Left(
+        const ServerFailure("حدث خطأ غير متوقع أثناء رفع المرفقات"),
+      );
+    }
   }
-}
-
 }

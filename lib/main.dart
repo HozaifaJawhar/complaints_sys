@@ -1,12 +1,17 @@
+import 'package:complaints_sys/core/constants/app_themes.dart';
+import 'package:complaints_sys/core/routing/router_service.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
-import 'package:provider/provider.dart';
-import 'package:complaints_sys/core/constants/app_themes.dart';
-import 'package:complaints_sys/core/routing/router_service.dart';
 import 'package:complaints_sys/core/di/injection_container.dart';
-import 'package:firebase_core/firebase_core.dart';
 import 'package:complaints_sys/core/services/notification_service.dart';
+import 'package:complaints_sys/core/services/notification_storage_service.dart';
+import 'package:complaints_sys/features/notifications/data/models/notification_item_adapter.dart';
+import 'package:firebase_core/firebase_core.dart';
+import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:hive_flutter/hive_flutter.dart';
+import 'package:provider/provider.dart';
 
 final RouterService _routerService = RouterService();
 
@@ -14,8 +19,17 @@ void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp();
 
-  // Initialize Notification Service (FCM)
-  // We will initialize it in MyApp using the DI instance to ensure dependencies are resolved.
+  // Initialize Hive
+  await Hive.initFlutter();
+  Hive.registerAdapter(NotificationItemAdapter());
+
+  // Initialize Storage Service
+  final storageService = NotificationStorageService();
+  await storageService.init();
+
+  // Initialize Notification Service
+  final notificationService = NotificationService(storageService);
+  await notificationService.initialize();
 
   runApp(MyApp());
 }
